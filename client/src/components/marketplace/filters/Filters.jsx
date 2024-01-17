@@ -8,7 +8,7 @@ import SortFilter from './SortFilter';
 const Filters = ({ onSearch, onFilterChange }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isDropdownOpen, setDropdownOpen] = useState(false)
 
     const initialFilters = {
         searchTerm: searchParams.get('searchTerm') || '',
