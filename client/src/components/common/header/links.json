@@ -24,15 +24,7 @@
       "navs": [
         {
           "title": "Sell Your House",
-          "path": "/homes/for-sale"
-        },
-        {
-          "title": "Find Sellers Agent",
-          "path": "/homes/open-houses"
-        },
-        {
-          "title": "Coming Soon",
-          "path": "/homes/coming-soon"
+          "path": "/property-listing"
         }
       ]
     }
@@ -65,7 +57,7 @@
     },
     {
       "title": "Sell",
-      "path": "/sell",
+      "path": "/property-listing",
       "isDrapdown": true,
       "navs": "SellNavs"
     },

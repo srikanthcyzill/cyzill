@@ -16,6 +16,9 @@ import { LoadScript } from "@react-google-maps/api";
 import PrivateRoute from './components/routes/PrivateRoute';
 import ListedProperties from './components/user/ListedProperties/ListedProperties';
 import NotFoundPage from './components/common/NotFoundPage/NotFound';
+import TermsAndConditions from './components/common/LegalDocuments/TermsAndConditions';
+import PrivacyPolicy from './components/common/LegalDocuments/PrivacyPolicy';
+import FAQ from './components/common/faq/FAQ';
 
 const libraries = ['places'];
 function App() {
@@ -35,6 +38,9 @@ function App() {
         <Route path="/homes" exact={true} element={<Homes />} />
         <Route path="/maps" exact={true} element={<Map />} />
         <Route path="/verification" exact={true} element={<Verification />} />
+        <Route path="/terms-and-conditions" exact={true} element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" exact={true} element={<PrivacyPolicy />} />
+        <Route path="/help" exact={true} element={<FAQ />} />
         <Route element={<PrivateRoute />}>
           <Route path="/property-listing" exact={true} element={<PropertyListing />} />
           <Route path="/listed-properties" element={currentUser ? <ListedProperties username={username} /> : <Navigate to="/login" replace />} />

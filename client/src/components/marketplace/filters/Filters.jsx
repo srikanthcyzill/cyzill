@@ -6,7 +6,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import SortFilter from './SortFilter';
 
 const Filters = ({ onSearch, onFilterChange }) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [isDropdownOpen, setDropdownOpen] = useState(false)
 
@@ -74,21 +74,6 @@ const Filters = ({ onSearch, onFilterChange }) => {
         handleFilterChange(name, value);
     };
 
-    const handleAmenitiesChange = (event) => {
-        const { value, checked } = event.target;
-        setFilters((prevFilters) => {
-            const { amenities } = prevFilters;
-            const updatedAmenities = checked ? [...amenities, value] : amenities.filter((amenity) => amenity !== value);
-            onFilterChange('amenities', updatedAmenities);
-            const params = new URLSearchParams(searchParams);
-            params.delete('amenities');
-            updatedAmenities.forEach((amenity) => params.append('amenities', amenity));
-            navigate({ search: params.toString() });
-
-            return { ...prevFilters, amenities: updatedAmenities };
-        });
-    };
-
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
@@ -117,7 +102,7 @@ const Filters = ({ onSearch, onFilterChange }) => {
 
     return (
         <div className='flex items-center justify-center gap-4'>
-            <div className="searchbar flex items-center">
+            <div className=" flex items-center">
                 <SearchBar height="h-10" placeholderText="Enter a city or address" onSearch={handleSearchChange} />
                 <button onClick={handleCurrentLocationClick} className="ml-2 p-2 bg-blue-500 text-white rounded">
                     <MdMyLocation />

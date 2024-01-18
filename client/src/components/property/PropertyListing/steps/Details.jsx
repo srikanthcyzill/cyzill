@@ -22,6 +22,7 @@ const Details = ({ formData, saveFormData }) => {
         setAmenities(formData.amenities || []);
     }, [formData]);
 
+
     const handleFurnishedStatusChange = (e) => {
         saveFormData({ ...formData, furnishedStatus: e.target.value });
     };
