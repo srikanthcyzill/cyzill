@@ -1,70 +1,97 @@
 import mongoose from "mongoose";
 
 const propertySchema = new mongoose.Schema({
-    phoneNumber: String,
-    mainPhoto: {
+    phoneNumber: {
         type: String,
-        required: true,
     },
+    photo: {
+        type: String,
+        required: true
+    },
+
     username: {
         type: String,
-        required: true,
+        required: true
     },
-    propertyManagerType: {
+    personalDetails: {
         type: String,
-        required: true,
+        required: true
     },
-    propertyTransactionType: {
+    forDetails: {
         type: String,
-        required: true,
     },
-    propertyType: String,
-    unitsInBuilding: Number,
-    totalUnits: Number,
+    propertyType: {
+        type: String,
+    },
+    flatsInSociety: {
+        type: String,
+    },
+    totalFlats: {
+        type: String,
+    },
     location: {
-        latitude: Number,
-        longitude: Number,
-        address: String,
+        lat: Number,
+        lng: Number,
+        address: String
     },
-    propertyDescription: String,
-    bedrooms: Number,
-    bathrooms: Number,
-    buildingFloors: Number,
-    unitFloorNumber: Number,
-    furnishingStatus: String,
-    coveredArea: Number,
-    carpetArea: Number,
-    yearOfConstruction: Number,
-    propertyAmenities: [String],
-    photos: [String],
+    description: {
+        type: String
+    },
+    bedrooms: {
+        type: Number
+    },
+    bathrooms: {
+        type: Number
+    },
+    totalFloors: {
+        type: Number
+    },
+    floorNumber: {
+        type: Number
+    },
+    furnishedStatus: {
+        type: String,
+    },
+    coveredArea: {
+        type: Number
+    },
+    carpetArea: {
+        type: Number
+    },
+    constructionYear: {
+        type: Number
+    },
+    amenities: {
+        type: [String],
+    },
+    photos: [{
+        type: String
+    }],
     price: {
         type: Number,
-        required: true,
+        required: true
     },
-    securityDeposit: Number,
-    priceInclusions: {
+    advanceDeposit: {
+        type: Number,
+        required: true
+    },
+    priceIncludes: {
         type: String,
-        required: true,
+        required: true
     },
-    maintenanceCharges: Number,
-    membershipStatus: {
-        type: String,
-        enum: ['silver', 'gold', 'diamond', 'platinum'],
-        default: 'silver',
+    maintenanceCharges: {
+        type: Number,
+        required: true
     },
-    propertyStatus: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active',
-    },
-    isStampDutyExcluded: {
+    excludeStampDuty: {
         type: Boolean,
-        default: false,
-    },
+        default: false
+    }
 }, { timestamps: true });
-
-propertySchema.index({ '$**': 'text' });
 
 const Property = mongoose.model('Property', propertySchema);
 
 export default Property;
+
+
+propertySchema.index({ '$**': 'text' });
