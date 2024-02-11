@@ -10,7 +10,7 @@ import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete }) => {
     const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [, setSelectedProperty] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
     const navigate = useNavigate();
     const { currentUser } = useSelector(state => state.user);
