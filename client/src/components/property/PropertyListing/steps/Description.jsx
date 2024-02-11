@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 const useInput = (initialValue, key, formData, saveFormData) => {
     const [value, setValue] = useState(formData?.[key] !== undefined ? formData[key] : initialValue);
-
     useEffect(() => {
         setValue(formData?.[key] !== undefined ? formData[key] : initialValue);
     }, [formData, initialValue, key]);
+
 
     const handleChange = (e) => {
         if (e && e.target) {
@@ -55,25 +55,29 @@ const Description = ({ formData, saveFormData }) => {
         if (propertyType !== 'flat') {
             resetTotalFlats();
         }
-    }, [propertyType, resetTotalFlats]);
+    }, [propertyType]);
 
     return (
         <>
-            <div className="w-full mx-auto mt-4">
-                <h2 className="text-2xl font-semibold mb-4">Description</h2>
-                <div className="mx-auto p-10 grid grid-cols-2 gap-6">
-                    <div>
+            <div className="w-full mx-auto mt-4 flex justify-center">
+                <div className="w-1/2">
+                    <h2 className="text-2xl font-semibold mb-4 text-center w-full">Description</h2>
+                    <div className="mx-auto p-10">
                         <form action="/submit_description" className="space-y-4">
                             <div>
-                                <label className="block mb-1 font-medium">I am</label>
-                                <select value={personalDetails} onChange={handlePersonalDetailsChange} className="w-full border rounded-md px-3 py-2" >
+                                <label className="block mb-1 font-medium">Property Listed By</label>
+                                <select
+                                    value={personalDetails}
+                                    onChange={handlePersonalDetailsChange}
+                                    className="w-full border rounded-md px-3 py-2"
+                                >
                                     <option value=""></option>
                                     <option value="owner">Owner</option>
                                     <option value="agent">Agent</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block mb-1 font-medium">For Sell / Rent</label>
+                                <label className="block mb-1 font-medium">Property Listing Type</label>
                                 <select value={forDetails} onChange={handleForDetailsChange} className="w-full border rounded-md px-3 py-2" >
                                     <option value=""></option>
                                     <option value="sell">Sell</option>
@@ -81,7 +85,7 @@ const Description = ({ formData, saveFormData }) => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block mb-1 font-medium">Property Type:</label>
+                                <label className="block mb-1 font-medium">Type of Property</label>
                                 <select value={propertyType} onChange={handlePropertyTypeChange} className="w-full border rounded-md px-3 py-2">
                                     <option value=""></option>
                                     <optgroup label="ALL RESIDENTIAL">
@@ -127,9 +131,6 @@ const Description = ({ formData, saveFormData }) => {
                                 {warning && <p className="text-xs text-red-500 mt-1">{warning}</p>}
                             </div>
                         </form>
-                    </div>
-                    <div className="bg-gray-100 p-4 border rounded-md">
-                        <h3 className="text-lg font-semibold mb-2">Property Details</h3>
                     </div>
                 </div>
             </div>

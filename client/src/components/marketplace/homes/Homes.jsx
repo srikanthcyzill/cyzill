@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PropertyCard from '../../property/PropertyCard/PropertyCard';
 import Map from '../map/Map';
-import Filters from '../filters/Filters';
+import Filters from '../../../components/SearchBar/filters/Filters';
 import { BASE_URL } from "../../../config";
 import ContactForm from "./ContactForm";
 import { debounce } from 'lodash';
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PropertyDetails from "../../property/PropertyCard/PropertyDetails";
-import { Modal } from "../../../context/Modal";
 import WithLoading from "../../common/Loading/WithLoading";
+import { TbMapSearch, TbHomeSearch } from "react-icons/tb"; // Import the appropriate icons
+import { useMediaQuery } from '@react-hook/media-query'; // Import useMediaQuery
 
 const Homes = () => {
     const [searchParams] = useSearchParams();
@@ -32,7 +33,10 @@ const Homes = () => {
         amenities: [],
         saleOrRent: searchParams.get('saleOrRent') || 'sell',
     });
-    const [mapIsVisible] = useState(true);
+    const [mapIsVisible, setMapIsVisible] = useState(false); // State to control map visibility
+
+    // Use useMediaQuery to detect screen size
+    const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
         setFilters(prevFilters => ({
@@ -59,14 +63,6 @@ const Homes = () => {
             fetchData();
         }
     }, [propertyData]);
-
-    useEffect(() => {
-        const modalTimeout = setTimeout(() => {
-            setShowModal(true);
-        }, 7000);
-
-        return () => clearTimeout(modalTimeout);
-    }, []);
 
     useEffect(() => {
         if (!propertyData) {
@@ -110,12 +106,15 @@ const Homes = () => {
         if (bottom) {
             setDisplayCount(prevCount => prevCount + 6);
         }
-    }, 300);
+    }, 3000);
 
-    const handleCloseModal = () => {
-        setShowModal(false);
-        navigate('/homes', { replace: true });
-    };
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowModal(true);
+        }, 8000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         if (propertyId && propertyData) {
@@ -131,6 +130,11 @@ const Homes = () => {
         return <div>No properties found.</div>;
     }
 
+    const toggleMapVisibility = () => {
+        setMapIsVisible(prevState => !prevState);
+    };
+
+
     return (
         <div onScroll={handleScroll} style={{ height: '100vh', overflow: 'auto' }}>
             <div className="w-full h-screen flex flex-col">
@@ -138,41 +142,73 @@ const Homes = () => {
                     <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} saleOrRent={saleOrRent} />
                 </div>
                 <div className="flex-grow overflow-auto">
-                    <div className="flex flex-row h-full overflow-auto">
-                        <div className="w-1/2 h-full overflow-auto lg:block hidden">
-                            <Map setSelectedProperties={setSelectedProperties} setVisibleProperties={setVisibleProperties} filters={filters} propertyData={propertyData} visibleProperties={visibleProperties} saleOrRent={saleOrRent} />
-                        </div>
-                        <div className="w-full lg:w-1/2 h-full overflow-auto p-2">
-                            <div className="py-4">
-                                <p className="text-lg font-semibold text-gray-700">Real Estate & Homes For Sale</p>
+                    {isSmallScreen ? (
+                        mapIsVisible ? (
+                            <div className="w-full h-full overflow-auto p-2">
+                                <Map setSelectedProperties={setSelectedProperties} setVisibleProperties={setVisibleProperties} filters={filters} propertyData={propertyData} visibleProperties={visibleProperties} saleOrRent={saleOrRent} />
                             </div>
-                            {mapIsVisible && visibleProperties.length === 0 && (
-                                <div className="no-properties-found-message text-lg"> We couldn't find any property </div>
-                            )}
-                            <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-3 sm:grid-cols-2 ">
-                                {visibleProperties.map(property => (
-                                    <div className="property-card" key={property._id}>
-                                        <PropertyCard property={property} />
-                                    </div>
-                                ))}
+                        ) : (
+                            <div className="w-full h-full overflow-auto p-2">
+                                <div className="py-4">
+                                    <p className="text-lg font-semibold text-gray-700">Real Estate & Homes For Sale</p>
+                                </div>
+                                {!mapIsVisible && visibleProperties.length === 0 && (
+                                    <div className="no-properties-found-message text-lg"> We couldn't find any property </div>
+                                )}
+                                <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-3 sm:grid-cols-2 ">
+                                    {visibleProperties.map(property => (
+                                        <div className="property-card" key={property._id}>
+                                            <PropertyCard property={property} />
+                                        </div>
+                                    ))}
+                                </div>
+                                {visibleProperties.length >= propertyData.length && (
+                                    <div className="all-properties-loaded flex justify-center items-center"> All properties have been loaded. </div>
+                                )}
                             </div>
-                            {visibleProperties.length >= propertyData.length && (
-                                <div className="all-properties-loaded flex justify-center items-center"> All properties have been loaded. </div>
-                            )}
+                        )
+                    ) : (
+                        <div className="flex flex-row h-full overflow-auto">
+                            <div className="w-screen h-full overflow-auto p-2">
+                                <Map setSelectedProperties={setSelectedProperties} setVisibleProperties={setVisibleProperties} filters={filters} propertyData={propertyData} visibleProperties={visibleProperties} saleOrRent={saleOrRent} />
+                            </div>
+                            <div className="w-screen h-full overflow-auto p-2">
+                                <div className="py-4">
+                                    <p className="text-lg font-semibold text-gray-700">Real Estate & Homes For Sale</p>
+                                </div>
+                                {!mapIsVisible && visibleProperties.length === 0 && (
+                                    <div className="no-properties-found-message text-lg"> We couldn't find any property </div>
+                                )}
+                                <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-3 sm:grid-cols-2 ">
+                                    {visibleProperties.map(property => (
+                                        <div className="property-card" key={property._id}>
+                                            <PropertyCard property={property} />
+                                        </div>
+                                    ))}
+                                </div>
+                                {visibleProperties.length >= propertyData.length && (
+                                    <div className="all-properties-loaded flex justify-center items-center"> All properties have been loaded. </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
-            {showModal && selectedProperty && (
-                <ContactForm onClose={() => setShowModal(false)} />
+            {isSmallScreen && (
+                <div className="fixed bottom-8 right-8 z-50">
+                    <button onClick={toggleMapVisibility} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                        {mapIsVisible ? <TbHomeSearch size={24} /> : <TbMapSearch size={24} />}
+                    </button>
+                </div>
             )}
+            {showModal && <ContactForm onClose={() => setShowModal(false)} />}
             {showModal && selectedProperty && (
-                <Modal onClose={handleCloseModal}>
-                    <PropertyDetails property={selectedProperty} />
-                </Modal>
+                <PropertyDetails property={selectedProperty} />
             )}
         </div>
     );
+
+
 };
 
 export default WithLoading(Homes);

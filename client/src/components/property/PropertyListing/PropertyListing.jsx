@@ -14,16 +14,39 @@ const initialState = {
         detail: '',
         payment: [],
     },
+    completedSteps: {},
 };
 
 function reducer(state, action) {
     switch (action.type) {
         case 'nextStep':
-            return { ...state, step: state.step + 1 };
+            return {
+                ...state,
+                step: state.step + 1,
+                completedSteps: {
+                    ...state.completedSteps,
+                    [state.step]: true,
+                },
+            };
         case 'previousStep':
             return { ...state, step: state.step - 1 };
         case 'saveFormData':
-            return { ...state, formData: { ...state.formData, ...action.data, location: { ...state.formData.location, ...action.data.location } } };
+            return {
+                ...state,
+                formData: {
+                    ...state.formData,
+                    ...action.data,
+                    location: {
+                        ...state.formData.location,
+                        ...action.data.location,
+                    },
+                },
+            };
+        case 'setStep':
+            if (state.completedSteps[action.newStep] || action.newStep === state.step + 1) {
+                return { ...state, step: action.newStep };
+            }
+            return state;
         default:
             return state;
     }
@@ -40,12 +63,14 @@ const steps = {
 const PropertyListing = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { step, formData } = state;
-
     const nextStep = () => {
-        if (step < Object.keys(steps).length) {
+        const nextStepNumber = step + 1;
+        if (nextStepNumber <= Object.keys(steps).length) {
             dispatch({ type: 'nextStep' });
         }
     };
+
+
 
     const previousStep = () => dispatch({ type: 'previousStep' });
 
@@ -58,14 +83,29 @@ const PropertyListing = () => {
         console.log(formData);
     }, [formData]);
 
-    const { component: StepComponent } = steps[step];
+    const stepInfo = steps[step];
+
+    if (!stepInfo) {
+        return <div>Error: Step information is missing.</div>;
+    }
+    const { component: StepComponent } = stepInfo;
 
     const isStepCompleted = () => {
         switch (state.step) {
             case 1:
-                return state.formData.description && state.formData.description.trim() !== '' &&
-                    state.formData.personalDetails && state.formData.forDetails &&
-                    state.formData.propertyType && (state.formData.propertyType !== 'flat' || state.formData.totalFlats);
+                return (
+                    state.formData.description.trim() !== '' &&
+                    state.formData.media.length > 0 &&
+                    state.formData.location.lat !== '' &&
+                    state.formData.location.lng !== '' &&
+                    state.formData.bedrooms &&
+                    state.formData.bathrooms &&
+                    state.formData.coveredArea &&
+                    state.formData.carpetArea &&
+                    state.formData.constructionYear &&
+                    state.formData.payment.length > 0
+                );
+
             case 2:
                 return state.formData.media && state.formData.media.length > 0;
             case 3:
@@ -85,11 +125,17 @@ const PropertyListing = () => {
     return (
         <div className="p-10 relative">
             <div className="steps">
-                <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500">
+                <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 hover:cursor-pointer">
                     {Object.keys(steps).map((index) => {
                         const { name: stepName } = steps[index];
                         return (
-                            <li key={index} className={`flex md:w-full items-center ${step > index ? 'text-blue-600' : 'text-gray-500'} after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700`} >
+                            <li key={index} className={`flex md:w-full items-center ${step > index ? 'text-blue-600' : 'text-gray-500'} after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700`}
+                                onClick={() => {
+                                    if (index <= step) {
+                                        dispatch({ type: 'setStep', newStep: index });
+                                    }
+                                }}
+                            >
                                 <span className={`flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500 ${step > index ? 'text-blue-600 dark:text-blue-500' : ''}`} >
                                     {step > index && (
                                         <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" >
@@ -105,7 +151,7 @@ const PropertyListing = () => {
                 <div />
             </div>
             <StepComponent formData={formData} setFormData={saveFormData} saveFormData={saveFormData} />
-            <div className="flex justify-between">
+            <div className="flex justify-center items-center gap-40">
                 {step !== 1 && (
                     <button onClick={previousStep} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
                         Previous
@@ -117,6 +163,7 @@ const PropertyListing = () => {
                     </button>
                 )}
             </div>
+
         </div>
     );
 };

@@ -10,7 +10,6 @@ import PropertyListing from './components/property/PropertyListing/PropertyListi
 import Profile from './components/user/Profile/Profile';
 import Verification from './components/user/verification/Verification';
 import Hero from './components/common/Hero/Hero';
-import Map from './components/marketplace/map/Map';
 import Homes from './components/marketplace/homes/Homes';
 import { LoadScript } from "@react-google-maps/api";
 import PrivateRoute from './components/routes/PrivateRoute';
@@ -24,6 +23,8 @@ import Loading from './components/common/Loading/Loading';
 import { useEffect, useState } from 'react';
 import FindAgents from './components/common/findagents/FindAgents';
 import PropertyPricingCards from './components/property/PropertyStatus/PropertyPricingCards';
+import Saved from './components/user/saved/Saved';
+import { NextUIProvider } from "@nextui-org/system";
 
 const libraries = ['places'];
 function App() {
@@ -31,7 +32,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const currentUser = useSelector(state => state.user.currentUser);
   const username = currentUser?.username
-  const showFooter = !location.pathname.includes('/homes');
+  const showFooter = !location.pathname.includes('/homes' && '/maps');
   const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
@@ -47,31 +48,33 @@ function App() {
   }
 
   return (
-    <LoadScript googleMapsApiKey={googleMapsApiKey} libraries={libraries}>
-      <Header />
-      <Routes>
-        <Route path="/" exact={true} element={<Hero />} />
-        <Route path="/login" exact={true} element={<LogIn />} />
-        <Route path="/signup" exact={true} element={<SignUp />} />
-        <Route path="/reset-password" exact={true} element={<ResetPassword />} />
-        <Route path="/property-details/:propertyId?" exact={true} element={<PropertyDetails />} />
-        <Route path="/property-plans" exact={true} element={<PropertyPricingCards />} />
-        <Route path="/homes" exact={true} element={<Homes />} />
-        <Route path="/find-agents" exact={true} element={<FindAgents />} />
-        <Route path="/maps" exact={true} element={<Map />} />
-        <Route path="/verification" exact={true} element={<Verification />} />
-        <Route path="/terms-and-conditions" exact={true} element={<TermsAndConditions />} />
-        <Route path="/privacy-policy" exact={true} element={<PrivacyPolicy />} />
-        <Route path="/help" exact={true} element={<FAQ />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/property-listing" exact={true} element={<PropertyListing />} />
-          <Route path="/listed-properties" element={currentUser ? <ListedProperties username={username} /> : <Navigate to="/login" replace />} />
-          <Route exact path='/profile' element={<Profile />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      {showFooter && <Footer />}
-    </LoadScript>
+    <NextUIProvider>
+      <LoadScript googleMapsApiKey={googleMapsApiKey} libraries={libraries}>
+        <Header />
+        <Routes>
+          <Route path="/" exact={true} element={<Hero />} />
+          <Route path="/login" exact={true} element={<LogIn />} />
+          <Route path="/signup" exact={true} element={<SignUp />} />
+          <Route path="/reset-password" exact={true} element={<ResetPassword />} />
+          <Route path="/property-details/:propertyId?" exact={true} element={<PropertyDetails />} />
+          <Route path="/property-plans" exact={true} element={<PropertyPricingCards />} />
+          <Route path="/homes" exact={true} element={<Homes />} />
+          <Route path="/find-agents" exact={true} element={<FindAgents />} />
+          <Route path="/verification" exact={true} element={<Verification />} />
+          <Route path="/terms-and-conditions" exact={true} element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" exact={true} element={<PrivacyPolicy />} />
+          <Route path="/help" exact={true} element={<FAQ />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/property-listing" exact={true} element={<PropertyListing />} />
+            <Route path="/saved" exact={true} element={<Saved />} />
+            <Route path="/listed-properties" element={currentUser ? <ListedProperties username={username} /> : <Navigate to="/login" replace />} />
+            <Route exact path='/profile' element={<Profile />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        {showFooter && <Footer />}
+      </LoadScript>
+    </NextUIProvider>
   );
 }
 

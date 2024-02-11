@@ -86,6 +86,19 @@ const propertySchema = new mongoose.Schema({
     excludeStampDuty: {
         type: Boolean,
         default: false
+    },
+    publishedStatus: {
+        type: Boolean,
+        default: false
+    },
+    propertyStatus: {
+        type: String,
+        enum: ['none', 'bronze', 'silver', 'gold', 'platinum'],
+        default: 'none'
+    },
+    soldStatus: {
+        type: Boolean,
+        default: false,
     }
 }, { timestamps: true });
 

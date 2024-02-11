@@ -23,6 +23,7 @@
   background-color: #fff;
   position: relative;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .property-image {
@@ -162,13 +163,31 @@ span.sale-label.property-type {
   font-size: 12px;
 }
 
-.posted-on-overlay {
+.card-top {
+  display: flex;
+  justify-content: space-between;
   position: absolute;
+  width: calc(100% - 20px);
   top: 10px;
   left: 10px;
+}
+
+.like-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.posted-on-overlay {
   background-color: #00000099;
   color: #fff;
   padding: 2px 4px;
   border-radius: 5px;
-  z-index: 1;
+}
+
+.property-card:hover {
+  list-style: none;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 4px 10px -1px,
+    rgba(0, 0, 0, 0.3) 0px 4px 6px -1px;
 }

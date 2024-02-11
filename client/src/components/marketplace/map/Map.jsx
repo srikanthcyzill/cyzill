@@ -3,9 +3,8 @@ import { GoogleMap, InfoWindow } from "@react-google-maps/api";
 import PropertyCard from '../../property/PropertyCard/PropertyCard';
 import { debounce } from 'lodash';
 import { OverlayView } from "@react-google-maps/api";
-import { BASE_URL } from "../../../config";
 
-const Map = ({ setSelectedProperties, setVisibleProperties, filters, propertyData, visibleProperties }) => {
+const Map = ({ setSelectedProperties, setVisibleProperties, filters, propertyData = [], visibleProperties = [] }) => {
     const [map, setMap] = useState(null);
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [initialCenter] = useState({ lat: 17.422, lng: 78.488 });

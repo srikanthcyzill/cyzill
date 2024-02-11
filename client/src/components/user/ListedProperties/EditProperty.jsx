@@ -40,7 +40,6 @@ const EditProperty = ({ propertyId }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            {/* Add form fields for property details here */}
             <button type="submit">Update Property</button>
         </form>
     );

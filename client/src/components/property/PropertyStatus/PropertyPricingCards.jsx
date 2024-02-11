@@ -1,5 +1,8 @@
-import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import "./PropertyPricing.css"
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { BASE_URL } from "../../../config";
 
 const plans = [
     {
@@ -11,7 +14,7 @@ const plans = [
         phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 49',
-        color: 'bg-bronze', // Tailwind CSS class for background color
+        color: 'bg-bronze',
     },
     {
         name: 'Silver',
@@ -22,7 +25,7 @@ const plans = [
         phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 129',
-        color: 'bg-silver', // Tailwind CSS class for background color
+        color: 'bg-silver',
     },
     {
         name: 'Gold',
@@ -33,7 +36,7 @@ const plans = [
         phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 309',
-        color: 'bg-gold', // Tailwind CSS class for background color
+        color: 'bg-gold',
     },
     {
         name: 'Platinum',
@@ -44,41 +47,65 @@ const plans = [
         phoneSupport: true,
         inquiry: 'Unlimited',
         price: '₹ 369',
-        color: 'bg-platinum', // Tailwind CSS class for background color
+        color: 'bg-platinum',
     },
 ];
 
 function PlanCard({ plan }) {
+    const [properties, setProperties] = useState([]);
+    const currentUser = useSelector(state => state.user.currentUser);
+    const username = currentUser?.username
+    const cardClass = `card pricing-box ${plan.color} ${plan.name === 'Gold' ? 'gold-card' : ''}`;
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(`${BASE_URL}/api/property/properties/user/${username}`);
+            const data = await response.json();
+            console.log(data);
+            setProperties(data);
+        };
+
+        fetchData();
+    }, [username]);
     return (
-        <Card className={`max-w-[400px] m-4 ${plan.name === 'Gold' ? 'w-full' : ''} ${plan.color}`} shadow>
-            <CardHeader className="flex gap-3 justify-center items-center">
-                <h3 className="text-xl font-semibold">{plan.name}</h3>
-            </CardHeader>
-            <Divider y={0} />
-            <CardBody>
-                <p>Days: {plan.days}</p>
-                <p>Support: {plan.support}</p>
-                <p>Property Listing: {plan.listing}</p>
-                <p>Email Support: {plan.emailSupport ? '✓' : 'X'}</p>
-                <p>Phone Support: {plan.phoneSupport ? '✓' : 'X'}</p>
-                <p>Buyer Inquiry: {plan.inquiry}</p>
-            </CardBody>
-            <Divider y={0} />
-            <CardFooter className="justify-center">
-                <Link color block>{plan.price}</Link>
-            </CardFooter>
-        </Card>
+        <div className="col-md-4">
+            <div className={cardClass}>
+                <div className="card-block">
+                    <h4 className="card-title">{plan.name}</h4>
+                    <h6 className="card-text">
+                        <span className="amount">{plan.price}</span>
+                    </h6>
+                </div>
+                <ul className="list-group list-group-flush">
+                    <li className="list-group-item text-center d-inline-block">Days: {plan.days}</li>
+                    <li className="list-group-item text-center d-inline-block">Support: {plan.support}</li>
+                    <li className="list-group-item text-center d-inline-block">Property Listing: {plan.listing}</li>
+                    <li className="list-group-item text-center d-inline-block">Email Support: {plan.emailSupport ? '✓' : 'X'}</li>
+                    <li className="list-group-item text-center d-inline-block">Phone Support: {plan.phoneSupport ? '✓' : 'X'}</li>
+                    <li className="list-group-item text-center d-inline-block">Buyer Inquiry: {plan.inquiry}</li>
+                </ul>
+                <div className="card-block">
+                    <Link href="#" className="btn btn-outline-start" title="Get Started">Get Started</Link>
+                </div>
+            </div>
+        </div>
     );
 }
 
 export default function MembershipPlans() {
     return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="flex flex-wrap items-center">
-                {plans.map((plan, index) => (
-                    <PlanCard key={index} plan={plan} />
-                ))}
+        <section className="pricing-plans text-center">
+            <div className="container">
+                <div className="row justify-content-md-center">
+                    <div className="col-sm-12 col-md-8 col-md-offset-2">
+                        <h1 className="section-title">Pricing Plans</h1>
+                    </div>
+                </div>
+                <div className="pricing-box-container">
+                    {plans.map((plan, index) => (
+                        <PlanCard key={index} plan={plan} />
+                    ))}
+                </div>
             </div>
-        </div>
+        </section>
     );
 }

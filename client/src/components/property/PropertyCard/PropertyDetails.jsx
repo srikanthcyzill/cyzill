@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaRegUser, FaShareAlt, FaEye, FaMapPin } from 'react-icons/fa';
-import { Modal, ModalProvider } from '../../../context/Modal.js';
 import ImageGallery from './ImageGallery';
 import { useLocation, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../../config';
 import WithLoading from '../../common/Loading/WithLoading.jsx';
-
+import { CheckboxIcon, Chip, ScrollShadow, Button, Tabs, Tab, Accordion, Breadcrumbs } from "@nextui-org/react";
+import useCurrencyFormatter from '../../../utils/useCurrencyFormatter';
 const PropertyDetails = ({ onClose }) => {
     const [activeImage, setActiveImage] = useState(0);
     const [showGallery, setShowGallery] = useState(false);
@@ -13,14 +13,11 @@ const PropertyDetails = ({ onClose }) => {
     const [property, setProperty] = useState(null);
     const { propertyId } = useParams();
     const location = useLocation();
+    const currencyFormatter = useCurrencyFormatter();
 
     const handleImageClick = (index) => {
         setActiveImage(index);
         setShowGallery(true);
-    };
-
-    const handleCloseGallery = () => {
-        setShowGallery(false);
     };
 
     useEffect(() => {
@@ -43,9 +40,14 @@ const PropertyDetails = ({ onClose }) => {
     }, [property, location.state]);
 
     return (
-        <ModalProvider>
+        <ScrollShadow>
             {property ? (
-                <div className="h-full bg-white p-4 flex flex-col justify-center items-center">
+                <div className="h-full bg-white px-60 flex flex-col justify-center items-center">
+                    <Breadcrumbs separator="/">
+                        <Breadcrumbs.Item href="#">Home</Breadcrumbs.Item>
+                        <Breadcrumbs.Item href="#">Properties</Breadcrumbs.Item>
+                        <Breadcrumbs.Item>{property._id}</Breadcrumbs.Item>
+                    </Breadcrumbs>
                     <div className="flex justify-between items-center">
                         <h1 className="text-3xl font-bold mb-4">Property Details</h1>
                     </div>
@@ -67,23 +69,20 @@ const PropertyDetails = ({ onClose }) => {
                             </div>
                         </div>
                         <div className="buttons mt-4 flex gap-2">
-                            <button className="btn btn-primary flex items-center">
-                                <FaShareAlt className="mr-2" />
-                                Share
-                            </button>
-                            <button className="btn btn-primary flex items-center">
-                                <FaEye className="mr-2" />
-                                View Contact
-                            </button>
-                            <button className="btn btn-primary flex items-center">
-                                <FaMapPin className="mr-2" />
-                                Location
-                            </button>
+                            <Button color="primary" auto>
+                                <FaShareAlt className="mr-2" /> Share
+                            </Button>
+                            <Button color="primary" auto>
+                                <FaEye className="mr-2" /> View Contact
+                            </Button>
+                            <Button color="primary" auto>
+                                <FaMapPin className="mr-2" /> Location
+                            </Button>
                         </div>
                         <div className="property-info p-4">
                             <div className="listing-details">
                                 <div className="price-details">
-                                    <h2 className="price text-2xl font-semibold">₹{property.price}</h2>
+                                    <h2 className="price text-2xl font-semibold">{currencyFormatter.format(property.price)}</h2>
                                 </div>
                             </div>
                             <div className="property-features mt-4">
@@ -117,21 +116,32 @@ const PropertyDetails = ({ onClose }) => {
                             <div className="other-details mt-4">
                                 <div>Construction Year: {property.constructionYear}</div>
                                 <div>Furnished Status: {property.furnishedStatus}</div>
-                                <div>Amenities: {property.amenities}</div>
+                                <div>Amenities:
+                                    <div className="flex gap-4">
+                                        {property.amenities.map((amenity, index) => (
+                                            <Chip
+                                                key={index}
+                                                startContent={<CheckboxIcon size={20} />}
+                                                variant="faded"
+                                                color="success"
+                                            >
+                                                {amenity}
+                                            </Chip>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div>Price Includes: {property.priceIncludes}</div>
-                                <div>Maintenance Charges: {property.maintenanceCharges}</div>
+                                <div>Maintenance Charges: {currencyFormatter.format(property.maintenanceCharges)}</div>
                                 <div>Description about the place : {property.description}</div>
                             </div>
                         </div>
                     </div>
                     {showGallery && (
-                        <Modal onClose={handleCloseGallery}>
-                            <ImageGallery images={property.photos} activeImage={activeImage} setActiveImage={setActiveImage} setShowGallery={setShowGallery} />
-                        </Modal>
+                        <ImageGallery images={property.photos} activeImage={activeImage} setActiveImage={setActiveImage} setShowGallery={setShowGallery} />
                     )}
                 </div>
             ) : null}
-        </ModalProvider>
+        </ScrollShadow>
     );
 };
 

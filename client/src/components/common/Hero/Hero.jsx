@@ -6,8 +6,8 @@ const Hero = () => {
     return (
         <>
             <div className="hero-container">
-                <div className="background-video w-full">
-                    <video loop autoPlay muted className='w-full h-auto cover-full'>
+                <div className="background-video">
+                    <video loop autoPlay muted className='w-full h-full'>
                         <source src="/hero-section.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>

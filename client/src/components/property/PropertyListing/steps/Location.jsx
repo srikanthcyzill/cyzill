@@ -111,7 +111,6 @@ const Location = ({ formData, saveFormData }) => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <h2 className="text-2xl font-semibold mb-4">Location Details</h2>
-            <input ref={searchBoxRef} type="text" placeholder="Search" />
             <StandaloneSearchBox
                 onLoad={onSearchBoxLoad}
                 onPlacesChanged={onPlacesChanged}

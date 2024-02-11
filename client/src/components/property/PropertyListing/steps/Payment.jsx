@@ -5,9 +5,9 @@ import { BASE_URL } from '../../../../config';
 
 const Payment = ({ formData, saveFormData }) => {
     const { currentUser } = useSelector(state => state.user);
-    const username = currentUser?.others?.username || currentUser?.username;
-    const photo = currentUser?.photo || currentUser?.others?.photo;
-    const phoneNumber = currentUser?.phoneNumber || currentUser?.others?.phoneNumber;
+    const username = currentUser?.username;
+    const photo = currentUser?.photo;
+    const phoneNumber = currentUser?.phoneNumber;
     const [price, setPrice] = useState(formData.price || '');
     const [advanceDeposit, setAdvanceDeposit] = useState(formData.advanceDeposit || '');
     const [maintenanceCharges, setMaintenanceCharges] = useState(formData.maintenanceCharges || '');

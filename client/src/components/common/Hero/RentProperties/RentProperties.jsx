@@ -22,8 +22,8 @@ const RentProperties = () => {
     }, [propertyData]);
 
     return (
-        <div className='container' >
-            <div className="text-large my-5 ">
+        <div className='mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8' >
+            <div className="text-2xl font-semibold mb-4 ">
                 <h3>Rent Properties</h3>
             </div>
             <div>

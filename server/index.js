@@ -40,7 +40,7 @@ app.listen(process.env.PORT, () => {
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/property', listingRouter);
-app.use('/api/saves', saveRouter);
+app.use('/api/saved', saveRouter);
 
 app.get("/api", function (req, res) {
     res.json({ message: "Cyzill api" });

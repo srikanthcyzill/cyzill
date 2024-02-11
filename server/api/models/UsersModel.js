@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
     },
+    userType: {
+        type: String,
+    },
     saved: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ListingsCard'
