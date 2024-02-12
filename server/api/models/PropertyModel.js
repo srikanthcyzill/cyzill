@@ -99,8 +99,21 @@ const propertySchema = new mongoose.Schema({
     soldStatus: {
         type: Boolean,
         default: false,
-    }
+    },
+    licenseCardStatus: {
+        paymentDate: { type: Date },
+        plan: { type: String, enum: ['none', 'bronze', 'silver', 'gold', 'platinum'], default: 'none' }
+    },
 }, { timestamps: true });
+
+propertySchema.methods.checkPlanExpiration = function () {
+    const planDuration = plans.find(plan => plan.name === this.licenseCardStatus.plan).days;
+    const expirationDate = new Date(this.licenseCardStatus.paymentDate.getTime() + planDuration * 24 * 60 * 60 * 1000);
+
+    if (new Date() > expirationDate) {
+        this.licenseCardStatus.plan = 'none';
+    }
+};
 
 const Property = mongoose.model('Property', propertySchema);
 

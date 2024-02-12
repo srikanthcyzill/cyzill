@@ -104,7 +104,7 @@ const Filters = ({ onSearch, onFilterChange }) => {
                     <MdMyLocation />
                 </button>
             </div>
-            <PriceFilter value={filters.price} onChange={handlePriceChange} />
+            {/* <PriceFilter value={filters.price} onChange={handlePriceChange} /> */}
             <BedroomFilter value={filters.bedrooms} onChange={handleBedroomChange} />
             <BathroomFilter value={filters.bathrooms} onChange={handleBathroomChange} />
             <PropertyTypeFilter value={filters.propertyType} onChange={handlePropertyTypeChange} />

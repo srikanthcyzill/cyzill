@@ -14,29 +14,26 @@ const Payment = ({ formData, saveFormData }) => {
     const [excludeStampDuty, setExcludeStampDuty] = useState(formData.excludeStampDuty || false);
     const [priceIncludes, setPriceIncludes] = useState(formData.priceIncludes || '');
     const [status, setStatus] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        setSubmitting(true);
         const response = await fetch(`${BASE_URL}/api/property/properties`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ...formData,
-                username: username,
-                photo: photo,
-                phoneNumber: phoneNumber
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, username: username, photo: photo, phoneNumber: phoneNumber })
         });
 
         if (response.ok) {
             console.log('Data saved successfully');
             setStatus('Saved Successfully');
-            navigate('/listed-properties');
+            navigate('/checkout', { state: { formData } });
         } else {
             console.error('Error saving data');
             setStatus('Error saving data');
+            setSubmitting(false);
         }
     };
 
@@ -85,9 +82,10 @@ const Payment = ({ formData, saveFormData }) => {
                     <span>Exclude Stamp Duty and Registration Charges</span>
                 </label>
                 <p>{status}</p>
-                <button onClick={handleSubmit} className="mt-4 p-2 bg-blue-500 text-white rounded-md mx-auto block">
-                    Submit
+                <button onClick={handleSubmit} disabled={submitting} className={`mt-4 p-2 text-white rounded-md mx-auto block ${submitting ? 'bg-blue-300' : 'bg-blue-500'}`}>
+                    {submitting ? 'Submitting...' : 'Submit'}
                 </button>
+
             </div>
             <div className="w-1/2 p-4"></div>
         </div>

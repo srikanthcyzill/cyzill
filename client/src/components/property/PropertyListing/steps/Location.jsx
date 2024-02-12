@@ -2,17 +2,18 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { GoogleMap, StandaloneSearchBox } from '@react-google-maps/api';
 import LocationDetails from './LocationDetails';
 
+
 const Location = ({ formData, saveFormData }) => {
     const [mapPosition, setMapPosition] = useState({
         lat: formData.location?.lat || 17.406498,
         lng: formData.location?.lng || 78.47724389999999,
     });
+    const MAP_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
     const [selectedPlace, setSelectedPlace] = useState(mapPosition);
-    const [center, setCenter] = useState(mapPosition);
-    const [isSaved, setIsSaved] = useState(false);
+    const [center] = useState(mapPosition);
+    const [, setIsSaved] = useState(false);
     const [address, setAddress] = useState('');
     const mapRef = useRef(null);
-    const inputRef = useRef(null);
     const markerRef = useRef(null);
     const searchBoxRef = useRef(null);
     const [searchBox, setSearchBox] = useState(null);
@@ -37,45 +38,27 @@ const Location = ({ formData, saveFormData }) => {
             markerRef.current.setPosition(newPosition);
         }
     };
-
-
     useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const newPosition = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
-                setSelectedPlace(newPosition);
-                setMapPosition(newPosition);
-                saveFormData((prevFormData) => ({
-                    ...prevFormData,
-                    location: newPosition,
-                }));
-                mapRef.current.panTo(newPosition);
-                markerRef.current.setPosition(newPosition);
-                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newPosition.lat},${newPosition.lng}&key=AIzaSyBzE9bz84Bdwy24I5DAjwVhgjijqgrEEdU`);
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    const address = data.results[0].formatted_address;
-                    setAddress(address);
-                    saveFormData({
-                        ...formData,
-                        location: {
-                            ...formData.location,
-                            address: address,
-                        },
-                    });
-                } else {
-                    console.log(data);
-                }
-            });
+        const fetchAddress = async (newPosition) => {
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newPosition.lat},${newPosition.lng}&key=${MAP_API_KEY}`);
+            const data = await response.json();
+            if (data.results && data.results.length > 0) {
+                const address = data.results[0].formatted_address;
+                setAddress(address);
+                saveFormData({
+                    ...formData,
+                    location: {
+                        ...formData.location,
+                        address: address,
+                    },
+                });
+            } else {
+                console.log(data);
+            }
+        };
 
-        }
-    }, []);
-
-
-
+        fetchAddress(selectedPlace);
+    }, [selectedPlace]);
 
     useEffect(() => {
         setIsSaved(false);
@@ -111,16 +94,8 @@ const Location = ({ formData, saveFormData }) => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <h2 className="text-2xl font-semibold mb-4">Location Details</h2>
-            <StandaloneSearchBox
-                onLoad={onSearchBoxLoad}
-                onPlacesChanged={onPlacesChanged}
-                ref={searchBoxRef}
-            >
-                <input
-                    type="text"
-                    placeholder="Search for a location"
-                    className="w-full p-2 mb-4 border border-gray-300 rounded-md "
-                />
+            <StandaloneSearchBox onLoad={onSearchBoxLoad} onPlacesChanged={onPlacesChanged} ref={searchBoxRef}>
+                <input type="text" placeholder="Search for a location" className="w-full p-2 mb-4 border border-gray-300 rounded-md " />
             </StandaloneSearchBox>
             <div className="w-full h-1/2 mb-4">
                 <GoogleMap
@@ -135,10 +110,8 @@ const Location = ({ formData, saveFormData }) => {
                         setSelectedPlace(newPosition);
                         setMapPosition(newPosition);
                         markerRef.current.setPosition(newPosition);
-
                         const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newPosition.lat},${newPosition.lng}&key=AIzaSyBzE9bz84Bdwy24I5DAjwVhgjijqgrEEdU`);
                         const data = await response.json();
-
                         if (data.results && data.results.length > 0) {
                             const addressComponents = data.results[0].address_components;
                             const postalCodeComponent = addressComponents.find(component => component.types.includes('postal_code'));
@@ -167,18 +140,18 @@ const Location = ({ formData, saveFormData }) => {
                                     areaName: areaName,
                                 },
                             };
+
                             saveFormData(newFormData);
-                            console.log(newFormData);
                         } else {
                             console.log(data);
                         }
                     }}
-
                     mapContainerStyle={{ height: '100%', width: '100%' }}
                     options={{ scrollwheel: true, fullscreenControl: false, mapTypeControl: true, disableDefaultUI: true, clickableIcons: false }}
                 />
             </div>
             <LocationDetails selectedPlace={selectedPlace} handleLatitudeChange={handleLatitudeChange} handleLongitudeChange={handleLongitudeChange} address={address} />
+
         </div>
     );
 };

@@ -11,7 +11,6 @@ const plans = [
         support: 'Business hours only',
         listing: 'Instantly',
         emailSupport: true,
-        phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 49',
         color: 'bg-bronze',
@@ -22,7 +21,6 @@ const plans = [
         support: 'Business hours only',
         listing: 'Instantly',
         emailSupport: true,
-        phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 129',
         color: 'bg-silver',
@@ -33,7 +31,6 @@ const plans = [
         support: 'Business hours only',
         listing: 'Instantly',
         emailSupport: true,
-        phoneSupport: false,
         inquiry: 'Unlimited',
         price: '₹ 309',
         color: 'bg-gold',
@@ -44,7 +41,6 @@ const plans = [
         support: 'Business hours only',
         listing: 'Instantly',
         emailSupport: true,
-        phoneSupport: true,
         inquiry: 'Unlimited',
         price: '₹ 369',
         color: 'bg-platinum',
@@ -54,7 +50,7 @@ const plans = [
 function PlanCard({ plan }) {
     const [properties, setProperties] = useState([]);
     const currentUser = useSelector(state => state.user.currentUser);
-    const username = currentUser?.username
+    const username = currentUser?.username;
     const cardClass = `card pricing-box ${plan.color} ${plan.name === 'Gold' ? 'gold-card' : ''}`;
     useEffect(() => {
         const fetchData = async () => {
@@ -76,11 +72,10 @@ function PlanCard({ plan }) {
                     </h6>
                 </div>
                 <ul className="list-group list-group-flush">
-                    <li className="list-group-item text-center d-inline-block">Days: {plan.days}</li>
+                    <li className="list-group-item text-center d-inline-block">Hosting Days: {plan.days}</li>
                     <li className="list-group-item text-center d-inline-block">Support: {plan.support}</li>
                     <li className="list-group-item text-center d-inline-block">Property Listing: {plan.listing}</li>
                     <li className="list-group-item text-center d-inline-block">Email Support: {plan.emailSupport ? '✓' : 'X'}</li>
-                    <li className="list-group-item text-center d-inline-block">Phone Support: {plan.phoneSupport ? '✓' : 'X'}</li>
                     <li className="list-group-item text-center d-inline-block">Buyer Inquiry: {plan.inquiry}</li>
                 </ul>
                 <div className="card-block">

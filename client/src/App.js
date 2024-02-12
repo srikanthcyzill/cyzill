@@ -25,6 +25,7 @@ import FindAgents from './components/common/findagents/FindAgents';
 import PropertyPricingCards from './components/property/PropertyStatus/PropertyPricingCards';
 import Saved from './components/user/saved/Saved';
 import { NextUIProvider } from "@nextui-org/system";
+import Checkout from './components/property/checkout/Checkout';
 
 const libraries = ['places'];
 function App() {
@@ -64,6 +65,7 @@ function App() {
           <Route path="/terms-and-conditions" exact={true} element={<TermsAndConditions />} />
           <Route path="/privacy-policy" exact={true} element={<PrivacyPolicy />} />
           <Route path="/help" exact={true} element={<FAQ />} />
+          <Route exact path='/checkout' element={<Checkout />} />
           <Route element={<PrivateRoute />}>
             <Route path="/property-listing" exact={true} element={<PropertyListing />} />
             <Route path="/saved" exact={true} element={<Saved />} />

@@ -26,7 +26,7 @@ const Homes = () => {
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [filters, setFilters] = useState({
         searchTerm: '',
-        price: '',
+        // price: '',
         bedrooms: '',
         bathrooms: '',
         propertyType: '',
@@ -71,7 +71,7 @@ const Homes = () => {
         if (Array.isArray(propertyData)) {
             const filteredProperties = propertyData.filter(property => {
                 return (
-                    (!filters.price || (property.price >= filters.price[0] && property.price <= filters.price[1])) &&
+                    // (!filters.price || (property.price >= filters.price[0] && property.price <= filters.price[1])) &&
                     (!filters.bedrooms ||
                         (filters.bedrooms === 'Any' ? true :
                             filters.bedrooms === '5+' ? property.bedrooms >= 5 :

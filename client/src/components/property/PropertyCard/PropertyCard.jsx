@@ -145,14 +145,14 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete }) =>
                     </div>
                 </div>
             </div>
-            <div className="absolute bottom-2 right-2 flex">
+            {/* <div className="absolute bottom-2 right-2 flex">
                 <Link to={`/edit-property/${property._id}`} className="mr-2 text-blue-500 hover:text-blue-700">
                     <FiEdit2 className="mr-1" />
                 </Link>
                 <button onClick={() => handleDelete(property._id)} className="text-red-500 hover:text-red-700">
                     <FiTrash2 />
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 };
