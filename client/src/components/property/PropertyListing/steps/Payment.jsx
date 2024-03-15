@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BASE_URL } from '../../../../config';
+import confetti from 'canvas-confetti';
 
 const Payment = ({ formData, saveFormData }) => {
     const { currentUser } = useSelector(state => state.user);
@@ -25,10 +26,14 @@ const Payment = ({ formData, saveFormData }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...formData, username: username, photo: photo, phoneNumber: phoneNumber })
         });
-
         if (response.ok) {
             console.log('Data saved successfully');
             setStatus('Saved Successfully');
+            confetti({
+                particleCount: 300,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
             navigate('/checkout', { state: { formData } });
         } else {
             console.error('Error saving data');

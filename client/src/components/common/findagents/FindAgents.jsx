@@ -1,68 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../../../config';
-import { Avatar } from '@nextui-org/react';
+import { Input } from '@nextui-org/react';
+import { SearchIcon } from '@nextui-org/shared-icons';
+import AgentCard from './AgentCard';
 
 const FindAgents = () => {
-    const [propertyData, setPropertyData] = useState([]);
+    const [agents, setAgents] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem('token');
             try {
-                const response = await fetch(`${BASE_URL}/api/property/properties`);
+                const response = await fetch(`${BASE_URL}/api/admin/agent`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
-                console.log('Fetched data:', data);
-                setPropertyData(data.properties);
+                setAgents(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-        if (!propertyData.length) {
+        if (!agents.length) {
             fetchData();
         }
-    }, [propertyData]);
-
-    // Extract unique usernames
-    const uniqueUsernames = Array.from(new Set(propertyData.map(property => property.username)));
+    }, [agents]);
 
     return (
         <div className="container mx-auto my-8">
-            <h1 className="text-2xl font-bold mb-4 text-center">
-                These are the Agents Currently Available
-            </h1>
-            <div className="overflow-x-auto">
-                <table className="table-auto mx-auto border-collapse border border-gray-400 mb-8">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-400 px-4 py-2">Agent Name</th>
-                            <th className="border border-gray-400 px-4 py-2">Agent Email</th>
-                            <th className="border border-gray-400 px-4 py-2">Agent Phone</th>
-                            <th className="border border-gray-400 px-4 py-2">Agent Photo</th>
-                            <th className="border border-gray-400 px-4 py-2">Properties Listed</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {uniqueUsernames.map((username) => {
-                            const agentProperties = propertyData.filter(property => property.username === username);
-                            const photoUrl = agentProperties[0]?.photo;
-
-                            return (
-                                <tr key={username}>
-                                    <td className="border border-gray-400 px-4 py-2">{username}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{agentProperties[0]?.agentEmail}</td>
-                                    <td className="border border-gray-400 px-4 py-2">{agentProperties[0]?.phoneNumber}</td>
-                                    <td className="border border-gray-400 px-4 py-2">
-                                        {photoUrl && typeof photoUrl === 'string' ? (
-                                            <Avatar isBordered src={photoUrl} />
-                                        ) : (
-                                            <span>No Photo</span>
-                                        )}
-                                    </td>
-                                    <td className="border border-gray-400 px-4 py-2">{agentProperties.length}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+            <h1 className="text-2xl font-bold mb-4 text-center">These are the Agents Currently Available</h1>
+            <Input
+                classNames={{
+                    base: 'max-w-full sm:max-w-[15rem] h-10',
+                    mainWrapper: 'h-full',
+                    input: 'text-small',
+                    inputWrapper: 'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
+                }}
+                placeholder='Enter Agent name or Area or Agency'
+                size='sm'
+                startContent={<SearchIcon size={18} />}
+                type='search'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+            <div>
+                {agents
+                    .filter(agent =>
+                        (agent.agentName && agent.agentName.toLowerCase().includes(search.toLowerCase())) ||
+                        (agent.agencyName && agent.agencyName.toLowerCase().includes(search.toLowerCase())) ||
+                        (agent.serviceArea && agent.serviceArea.toLowerCase().includes(search.toLowerCase()))
+                    )
+                    .map((agent) => (
+                        <AgentCard key={agent.id} agent={agent} /> // Use the AgentCard component
+                    ))}
             </div>
         </div>
     );

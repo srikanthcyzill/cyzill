@@ -8,8 +8,8 @@ import { debounce } from 'lodash';
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PropertyDetails from "../../property/PropertyCard/PropertyDetails";
 import WithLoading from "../../common/Loading/WithLoading";
-import { TbMapSearch, TbHomeSearch } from "react-icons/tb"; // Import the appropriate icons
-import { useMediaQuery } from '@react-hook/media-query'; // Import useMediaQuery
+import { TbMapSearch, TbHomeSearch } from "react-icons/tb";
+import { useMediaQuery } from '@react-hook/media-query';
 
 const Homes = () => {
     const [searchParams] = useSearchParams();
@@ -26,16 +26,15 @@ const Homes = () => {
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [filters, setFilters] = useState({
         searchTerm: '',
-        // price: '',
+        price: '',
         bedrooms: '',
         bathrooms: '',
         propertyType: '',
         amenities: [],
         saleOrRent: searchParams.get('saleOrRent') || 'sell',
     });
-    const [mapIsVisible, setMapIsVisible] = useState(false); // State to control map visibility
+    const [mapIsVisible, setMapIsVisible] = useState(false);
 
-    // Use useMediaQuery to detect screen size
     const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
@@ -71,7 +70,8 @@ const Homes = () => {
         if (Array.isArray(propertyData)) {
             const filteredProperties = propertyData.filter(property => {
                 return (
-                    // (!filters.price || (property.price >= filters.price[0] && property.price <= filters.price[1])) &&
+                    (!filters.price[0] || filters.price[0] === 'Any' || property.price >= filters.price[0]) &&
+                    (!filters.price[1] || filters.price[1] === 'Any' || property.price <= filters.price[1]) &&
                     (!filters.bedrooms ||
                         (filters.bedrooms === 'Any' ? true :
                             filters.bedrooms === '5+' ? property.bedrooms >= 5 :
@@ -182,7 +182,7 @@ const Homes = () => {
                                 <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-3 sm:grid-cols-2 ">
                                     {visibleProperties.map(property => (
                                         <div className="property-card" key={property._id}>
-                                            <PropertyCard property={property} />
+                                            <PropertyCard property={property} saleOrRent={saleOrRent} />
                                         </div>
                                     ))}
                                 </div>

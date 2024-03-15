@@ -12,7 +12,7 @@ const Login = () => {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
+    const [, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const dispatch = useDispatch();
@@ -39,8 +39,10 @@ const Login = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setUser(data);
-                dispatch(loginSuccess(data));
+                const { token, ...userData } = data;
+                localStorage.setItem('token', token);
+                setUser(userData);
+                dispatch(loginSuccess(userData));
                 navigate('/');
             } else {
                 switch (response.status) {

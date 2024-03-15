@@ -6,8 +6,10 @@ import path from 'path';
 import userRouter from './api/routes/Users.route.js';
 import authRouter from './api/routes/Auth.route.js';
 import listingRouter from './api/routes/Property.route.js';
-import saveRouter from './api/routes/Saves.route.js';
+import adminRoutes from './api/routes/Admin.route.js';
 import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
+
 
 dotenv.config();
 
@@ -40,7 +42,7 @@ app.listen(process.env.PORT, () => {
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/property', listingRouter);
-app.use('/api/saved', saveRouter);
+app.use('/api/admin', adminRoutes);
 
 app.get("/api", function (req, res) {
     res.json({ message: "Cyzill api" });
@@ -66,4 +68,20 @@ app.use((err, req, res, next) => {
         message,
         ...errorDetails,
     });
+});
+
+app.get('/api/verifyToken', (req, res) => {
+    const token = req.cookies.access_token;
+    console.log('Token:', token);
+
+    if (!token) {
+        return res.status(401).json({ valid: false });
+    }
+
+    try {
+        jwt.verify(token, process.env.JWT_SECRET);
+        res.json({ valid: true });
+    } catch (error) {
+        res.status(401).json({ valid: false });
+    }
 });

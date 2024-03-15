@@ -104,6 +104,12 @@ const propertySchema = new mongoose.Schema({
         paymentDate: { type: Date },
         plan: { type: String, enum: ['none', 'bronze', 'silver', 'gold', 'platinum'], default: 'none' }
     },
+    likes: [
+        {
+            user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            likedAt: { type: Date, default: Date.now },
+        },
+    ],
 }, { timestamps: true });
 
 propertySchema.methods.checkPlanExpiration = function () {

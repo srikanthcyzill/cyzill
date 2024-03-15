@@ -1,13 +1,15 @@
-import jwt from 'jsonwebtoken';
-import { errorHandler } from './error.js';
-
 export const verifyToken = (req, res, next) => {
-    const token = req.cookies.access_token;
+    const authHeader = req.headers.authorization;
 
-    if (!token) return next(errorHandler(401, 'Unauthorized'));
+    console.log('Authorization Header:', authHeader);
+
+    if (!authHeader) return next(errorHandler(401, 'Unauthorized'));
+
+    const token = authHeader.split(' ')[1];
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
+            console.log('Error verifying token:', err);
             if (err.name === 'TokenExpiredError') {
                 return next(errorHandler(401, 'Token expired'));
             } else {

@@ -34,10 +34,10 @@ const userSchema = new mongoose.Schema({
     userType: {
         type: String,
     },
-    saved: [{
+    savedProperties: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ListingsCard'
-    }]
+        ref: 'Property'
+    }],
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

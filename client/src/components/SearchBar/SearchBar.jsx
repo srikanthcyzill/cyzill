@@ -1,27 +1,22 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from '@nextui-org/react';
 import { SearchIcon } from '@nextui-org/shared-icons';
 
 const SearchBar = () => {
-    const location = useLocation();
+    const [search, setSearch] = useState('');
     const navigate = useNavigate();
-    const searchRef = useRef(null);
-    const isAtListingIndex = location.pathname === '/homes';
-    const [value, setValue] = useState('');
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const saleOrRent = queryParams.get('saleOrRent');
 
-    const handleSearchOnChange = (e) => {
-        const searchString = e.target.value;
-        setValue(searchString);
-        // Add your search logic here
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
     };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        // Add your submit logic here
-        if (isAtListingIndex) {
-            navigate('/homes');
-        }
+        navigate(`/homes?saleOrRent=${saleOrRent}&keyword=${search}`);
     };
 
     return (
@@ -38,9 +33,8 @@ const SearchBar = () => {
                     size='sm'
                     startContent={<SearchIcon size={18} />}
                     type='search'
-                    value={value}
-                    onChange={handleSearchOnChange}
-                    ref={searchRef}
+                    value={search}
+                    onChange={handleSearchChange}
                 />
             </form>
         </div>

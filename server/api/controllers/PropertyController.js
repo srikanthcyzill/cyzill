@@ -19,17 +19,44 @@ export const getProperties = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// Search for properties
+// Advanced search for properties
 export const searchProperties = async (req, res) => {
     try {
-        const { keyword } = req.query;
-        const properties = await Property.find({ $text: { $search: keyword } });
+        const { keyword, city, type, minPrice, maxPrice, username, pincode } = req.query;
+        let query = {};
+
+        if (keyword) {
+            query.$text = { $search: keyword };
+        }
+        if (city) {
+            query.city = city;
+        }
+        if (type) {
+            query.type = type;
+        }
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) {
+                query.price.$gte = minPrice;
+            }
+            if (maxPrice) {
+                query.price.$lte = maxPrice;
+            }
+        }
+        if (username) {
+            query.username = username;
+        }
+        if (pincode) {
+            query['location.address'] = { $regex: pincode, $options: 'i' };
+        }
+
+        const properties = await Property.find(query);
         res.status(200).json(properties);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Get a single property by ID
 export const getProperty = async (req, res) => {
@@ -97,4 +124,4 @@ export const getPropertiesForUser = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-};
+}

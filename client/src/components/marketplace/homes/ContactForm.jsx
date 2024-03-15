@@ -18,7 +18,6 @@ const ContactForm = ({ onClose }) => {
                         <div className="">
                             <form className="p-2 xl:p-10 flex flex-col space-y-4">
                                 <Input placeholder='Name' />
-                                <Input type='email' placeholder='Email' />
                                 <Input type='tel' placeholder='Phone No.' />
                                 <Textarea placeholder='Message' rows="6" />
                                 <Button color="primary" auto>

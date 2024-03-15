@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
 
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Image, Tooltip } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Image } from "@nextui-org/react";
 import { BASE_URL } from "../../../config";
+import PropertyCard from "../PropertyCard/PropertyCard";
 
 const plans = [
     { name: 'Bronze', days: '29 days', support: 'Business hours only', listing: 'Instantly', emailSupport: true, inquiry: 'Unlimited', price: '₹ 49', color: 'bg-bronze', },
@@ -30,15 +31,10 @@ function Checkout() {
     const username = formData.username;
     const [selectedPlan, setSelectedPlan] = useState(plans[0]);
     async function handleCheckout() {
-        // Simulate a delay for the payment process
         await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // Simulate a successful payment
         const paymentSuccessful = true;
-
         if (paymentSuccessful) {
             console.log('Payment successful');
-            // Update the licenseCardStatus here...
             const response = await fetch(`${BASE_URL}/api/property/properties/${propertyId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -82,7 +78,7 @@ function Checkout() {
                                     <tr>
                                         <td className="py-4">
                                             <div className="flex items-center">
-                                                <Image src="https://firebasestorage.googleapis.com/v0/b/gauth-estate.appspot.com/o/users%2Fsrikanthreddyct8f%2Fmedia%2Fimages%2Fpexels-photo-210617.jpeg?alt=media&token=e673585a-688c-42ef-9147-bca539068761" width={300} height={400} alt="Property" />
+                                                <PropertyCard property={formData.property} />
                                             </div>
                                         </td>
                                         <td className="py-4">{selectedPlan.price}</td>
@@ -123,11 +119,7 @@ function Checkout() {
                             </div>
 
                             <button onClick={handleCheckout} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
-                            <div className="mt-4">
-                                <h2 className="text-lg font-semibold mb-4">Property Details</h2>
-                                <p><strong>Username:</strong> {username}</p>
-                                <p><strong>Property Card:</strong> {JSON.stringify(formData, null, 2)}</p>
-                            </div>
+
                         </div>
                     </div>
                 </div>

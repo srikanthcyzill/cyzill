@@ -24,4 +24,5 @@ router.delete('/properties/:id', deleteProperty);
 // Get properties for a specific user
 router.get('/properties/user/:username', getPropertiesForUser);
 
+
 export default router;

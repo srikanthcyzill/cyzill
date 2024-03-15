@@ -1,55 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './PropertyCard.css';
-import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaChevronLeft, FaChevronRight, FaRegUser, FaHeart, FaRegHeart } from 'react-icons/fa';
-import moment from 'moment';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import useCurrencyFormatter from '../../../utils/useCurrencyFormatter';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL } from '../../../config';
-import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import PropertyImage from './CardComponents/PropertyImage';
+import LocationDetails from './CardComponents/LocationDetails';
+import OwnerActions from './CardComponents/OwnerActions';
+import PropertyDetails from './CardComponents/PropertyDetails';
+import PropertyFeatures from './CardComponents/PropertyFeatures';
+import AgentDetails from './CardComponents/AgentDetails';
+import { likeProperty, setLikedProperties, unlikeProperty } from '../../../redux/actions';
 
-const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete }) => {
+const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete, saleOrRent }) => {
     const [activeImageIndex, setActiveImageIndex] = useState(0);
     const [, setSelectedProperty] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
     const navigate = useNavigate();
     const { currentUser } = useSelector(state => state.user);
-    const currencyFormatter = useCurrencyFormatter();
+    const token = localStorage.getItem('token');
+    const dispatch = useDispatch();
 
-    const truncateText = (text, maxLength) => {
-        if (text.length > maxLength) {
-            return `${text.substring(0, maxLength)}...`;
+    useEffect(() => {
+        if (currentUser && property && property.likes) {
+            setIsLiked(property.likes.some(like => like.user === currentUser._id));
         }
-        return text;
-    };
+    }, [property?.likes, currentUser, property]);
+
 
     const handleLikeClick = async (e) => {
         e.stopPropagation();
-        if (!currentUser) {
+        if (!currentUser || !currentUser._id) {
+            console.log('User not logged in, redirecting to signup');
             navigate('/signup');
             return;
         }
         try {
-            const response = isLiked
-                ? await fetch(`${BASE_URL}/api/saved/saved/${property._id}`, { method: 'DELETE' })
-                : await fetch(`${BASE_URL}/api/saved/saved/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ listing_id: property._id }),
-                });
-
-            console.log(JSON.stringify({ listing_id: property._id }));
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            const response = await fetch(`${BASE_URL}/api/user/${currentUser._id}/savedProperties`, {
+                method: isLiked ? 'DELETE' : 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ property_id: property._id })
+            });
+            const data = await response.json();
+            const isPropertyLiked = data.user.savedProperties.includes(property._id);
+            setIsLiked(isPropertyLiked);
+            if (isPropertyLiked) {
+                dispatch(likeProperty(property._id));
+            } else {
+                dispatch(unlikeProperty(property._id));
             }
-
-            setIsLiked(!isLiked);
-        } catch (error) {
-            console.error('Error occurred while processing like/unlike action:', error);
+            dispatch(setLikedProperties(currentUser.savedProperties));
+        } catch (err) {
+            console.error('Error liking property:', err);
         }
     };
-
 
 
     const handleToggleClick = (direction) => {
@@ -73,86 +79,17 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete }) =>
         }
     };
 
+    const isOwner = currentUser && property.username === currentUser.username;
     return (
         <div className="property-card" key={property._id} onClick={handleCardClick}>
+            <PropertyImage property={property} activeImageIndex={activeImageIndex} handleToggleClick={handleToggleClick} />
             <div className="property-info">
-                <div className="property-image">
-                    {property.photos && property.photos.length > 0 ? (
-                        <>
-                            {property.photos.length > 1 && (
-                                <>
-                                    <div className="toggler-icon left" onClick={() => handleToggleClick(-1)}>
-                                        <FaChevronLeft />
-                                    </div>
-                                    <div className="toggler-icon right" onClick={() => handleToggleClick(1)}>
-                                        <FaChevronRight />
-                                    </div>
-                                </>
-                            )}
-                            <img src={property.photos[activeImageIndex]} alt={`Property ${property._id}`} />
-                        </>
-                    ) : (
-                        <div className="placeholder">No Image Available</div>
-                    )}
-                </div>
-                <div className="card-top">
-                    <div className="posted-on-overlay">
-                        {moment(new Date(property.createdAt)).fromNow()}
-                    </div>
-                    <div className="like-icon" onClick={handleLikeClick}>
-                        {isLiked ? <FaHeart /> : <FaRegHeart />}
-                    </div>
-                </div>
-                <div className="property-details">
-                    <div className="listing-details">
-                        <div className="price-details">
-                            <h2 className="price">{currencyFormatter.format(property.price)}</h2>
-                        </div>
-                    </div>
-                    <div className="property-features">
-                        <div className="features-list">
-                            <div className="feature">
-                                <div className="icon">
-                                    <FaBed />
-                                </div>
-                                {property.bedrooms}&emsp;/
-                            </div>
-                            <div className="features-list">
-                                <div className="icon">
-                                    <FaBath />
-                                </div>
-                                {property.bathrooms}&emsp;/
-                            </div>
-                            <div className="features-list">
-                                <div className="icon">
-                                    <FaRulerCombined />
-                                </div>
-                                {property.coveredArea} sqft
-                            </div>
-                        </div>
-                    </div>
-                    <div className="location-details">
-                        <div className="location-icon">
-                            <FaMapMarkerAlt />
-                        </div>
-                        {truncateText(property.location.address, 30)}
-                    </div>
-                    <div className="agent-details">
-                        <div>
-                            <FaRegUser />
-                        </div>
-                        <div className="agent-name">{property.username}</div>
-                    </div>
-                </div>
+                <PropertyDetails property={property} isLiked={isLiked} handleLikeClick={handleLikeClick} saleOrRent={saleOrRent} />
+                <PropertyFeatures property={property} />
+                <LocationDetails property={property} />
+                <AgentDetails property={property} />
             </div>
-            {/* <div className="absolute bottom-2 right-2 flex">
-                <Link to={`/edit-property/${property._id}`} className="mr-2 text-blue-500 hover:text-blue-700">
-                    <FiEdit2 className="mr-1" />
-                </Link>
-                <button onClick={() => handleDelete(property._id)} className="text-red-500 hover:text-red-700">
-                    <FiTrash2 />
-                </button>
-            </div> */}
+            {isOwner && <OwnerActions property={property} handleDelete={handleDelete} />}
         </div>
     );
 };

@@ -4,49 +4,6 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../../config";
 
-const plans = [
-    {
-        name: 'Bronze',
-        days: '29 days',
-        support: 'Business hours only',
-        listing: 'Instantly',
-        emailSupport: true,
-        inquiry: 'Unlimited',
-        price: '₹ 49',
-        color: 'bg-bronze',
-    },
-    {
-        name: 'Silver',
-        days: '89 days',
-        support: 'Business hours only',
-        listing: 'Instantly',
-        emailSupport: true,
-        inquiry: 'Unlimited',
-        price: '₹ 129',
-        color: 'bg-silver',
-    },
-    {
-        name: 'Gold',
-        days: '186 days',
-        support: 'Business hours only',
-        listing: 'Instantly',
-        emailSupport: true,
-        inquiry: 'Unlimited',
-        price: '₹ 309',
-        color: 'bg-gold',
-    },
-    {
-        name: 'Platinum',
-        days: '365 days',
-        support: 'Business hours only',
-        listing: 'Instantly',
-        emailSupport: true,
-        inquiry: 'Unlimited',
-        price: '₹ 369',
-        color: 'bg-platinum',
-    },
-];
-
 function PlanCard({ plan }) {
     const [properties, setProperties] = useState([]);
     const currentUser = useSelector(state => state.user.currentUser);
@@ -87,6 +44,18 @@ function PlanCard({ plan }) {
 }
 
 export default function MembershipPlans() {
+    const [plans, setPlans] = useState([]);
+
+    useEffect(() => {
+        const fetchPlans = async () => {
+            const response = await fetch(`${BASE_URL}/api/admin/plans`);
+            const data = await response.json();
+            setPlans(data);
+        };
+
+        fetchPlans();
+    }, []);
+
     return (
         <section className="pricing-plans text-center">
             <div className="container">

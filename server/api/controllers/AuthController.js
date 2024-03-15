@@ -41,12 +41,12 @@ export const login = async (req, res, next) => {
         }
         const token = jwt.sign({ _id: ValidUser._id }, process.env.JWT_SECRET);
         const { password: pwd, ...rest } = ValidUser._doc;
-        res.cookie('access_token', token, { httpOnly: true });
-        res.status(200).json(rest);
+        res.status(200).json({ token, ...rest });
     } catch (error) {
         next(error);
     }
 };
+
 
 
 

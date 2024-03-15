@@ -4,9 +4,9 @@ import ImageGallery from './ImageGallery';
 import { useLocation, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../../config';
 import WithLoading from '../../common/Loading/WithLoading.jsx';
-import { CheckboxIcon, Chip, ScrollShadow, Button, Tabs, Tab, Accordion, Breadcrumbs } from "@nextui-org/react";
+import { Chip, ScrollShadow, Button, Breadcrumbs } from "@nextui-org/react";
 import useCurrencyFormatter from '../../../utils/useCurrencyFormatter';
-const PropertyDetails = ({ onClose }) => {
+const PropertyDetails = () => {
     const [activeImage, setActiveImage] = useState(0);
     const [showGallery, setShowGallery] = useState(false);
     const [, setShowModal] = useState(false);
@@ -121,9 +121,11 @@ const PropertyDetails = ({ onClose }) => {
                                         {property.amenities.map((amenity, index) => (
                                             <Chip
                                                 key={index}
-                                                startContent={<CheckboxIcon size={20} />}
-                                                variant="faded"
-                                                color="success"
+                                                variant="shadow"
+                                                classNames={{
+                                                    base: "bg-gradient-to-br from-indigo-500 to-pink-500 border-small border-white/50 shadow-pink-500/30",
+                                                    content: "drop-shadow shadow-black text-white",
+                                                }}
                                             >
                                                 {amenity}
                                             </Chip>

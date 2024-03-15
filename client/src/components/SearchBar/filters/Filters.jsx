@@ -13,30 +13,29 @@ const Filters = ({ onSearch, onFilterChange }) => {
 
     const initialFilters = {
         searchTerm: searchParams.get('searchTerm') || '',
-        price: searchParams.get('price') || [10000, 20000, 50000],
         bedrooms: searchParams.get('bedrooms') || 'Any',
         bathrooms: searchParams.get('bathrooms') || 'Any',
         propertyType: searchParams.get('propertyType') || '',
         amenities: searchParams.getAll('amenities') || [],
         saleOrRent: searchParams.get('saleOrRent') || '',
+        price: [searchParams.get('minPrice') || 'Any', searchParams.get('maxPrice') || 'Any'],
     };
+
     const [filters, setFilters] = useState(initialFilters);
 
     useEffect(() => {
         const queryParams = Object.fromEntries(searchParams.entries());
         setFilters({
             searchTerm: queryParams.searchTerm || '',
-            price: [
-                isNaN(parseInt(queryParams.minPrice, 10)) ? 0 : parseInt(queryParams.minPrice, 10),
-                isNaN(parseInt(queryParams.maxPrice, 10)) ? 1000000 : parseInt(queryParams.maxPrice, 10),
-            ],
             bedrooms: queryParams.bedrooms || 'Any',
             bathrooms: queryParams.bathrooms || 'Any',
             propertyType: queryParams.propertyType || '',
             amenities: queryParams.amenities ? queryParams.amenities.split(',') : [],
             saleOrRent: queryParams.saleOrRent || 'sell',
+            price: [queryParams.minPrice || 'Any', queryParams.maxPrice || 'Any'],
         });
     }, [searchParams]);
+
 
 
     const updateSearchParams = (name, value) => {
@@ -66,6 +65,7 @@ const Filters = ({ onSearch, onFilterChange }) => {
     };
 
     const handlePriceChange = (minOrMax, value) => {
+        console.log(minOrMax, value);
         setFilters((prevFilters) => {
             const newFilters = { ...prevFilters };
             if (minOrMax === 'minimum') {
@@ -76,7 +76,7 @@ const Filters = ({ onSearch, onFilterChange }) => {
             return newFilters;
         });
         onFilterChange(minOrMax, value);
-        updateSearchParams(minOrMax, value);
+        updateSearchParams(minOrMax === 'minimum' ? 'minPrice' : 'maxPrice', value);
     };
 
 
@@ -104,7 +104,7 @@ const Filters = ({ onSearch, onFilterChange }) => {
                     <MdMyLocation />
                 </button>
             </div>
-            {/* <PriceFilter value={filters.price} onChange={handlePriceChange} /> */}
+            <PriceFilter value={filters.price} onChange={handlePriceChange} />
             <BedroomFilter value={filters.bedrooms} onChange={handleBedroomChange} />
             <BathroomFilter value={filters.bathrooms} onChange={handleBathroomChange} />
             <PropertyTypeFilter value={filters.propertyType} onChange={handlePropertyTypeChange} />
