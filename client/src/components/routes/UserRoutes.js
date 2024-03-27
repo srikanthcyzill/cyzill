@@ -22,7 +22,6 @@ import ListedProperties from '../user/ListedProperties/ListedProperties';
 import Profile from '../user/Profile/Profile';
 import NotFoundPage from '../common/NotFoundPage/NotFound';
 import AdminLogin from '../admin/auth/AdminLogin';
-import AdminEditPrivacyPolicy from '../admin/components/AdminEditPrivacyPolicy';
 import AddAgents from '../admin/scenes/agents/AddAgents';
 import EditPlans from '../admin/components/EditPlans';
 import AllUsers from '../admin/components/AllUsers';
@@ -30,6 +29,10 @@ import Customers from "../admin/scenes/customers/index";
 import AdminPrivateRoute from './AdminPrivateRoute';
 import Layout from '../admin/scenes/layout';
 import Properties from '../admin/scenes/properties';
+import Leads from '../admin/scenes/leads/Leads';
+import PrivacyPolicyPage from '../admin/scenes/pages/PrivacyPolicyPage';
+import DynamicPage from '../admin/scenes/pages/DynamicPage';
+import PageSelection from '../admin/scenes/pages/PagesSelection';
 
 const UserRoutes = () => {
     const currentUser = useSelector(state => state.user.currentUser);
@@ -60,11 +63,14 @@ const UserRoutes = () => {
             <Route path='/admin/login' element={<AdminLogin />} />
             <Route path='/admin/dashboard/*' element={<Layout />}>
                 <Route path='customers' element={<AdminPrivateRoute><Customers /></AdminPrivateRoute>} />
+                <Route path='leads' element={<AdminPrivateRoute><Leads /></AdminPrivateRoute>} />
                 <Route path='users' element={<AdminPrivateRoute><AllUsers /></AdminPrivateRoute>} />
                 <Route path='properties' element={<AdminPrivateRoute><Properties /></AdminPrivateRoute>} />
                 <Route path='plans' element={<AdminPrivateRoute><EditPlans /></AdminPrivateRoute>} />
                 <Route path='agents' element={<AdminPrivateRoute><AddAgents /></AdminPrivateRoute>} />
-                <Route path='privacy-policy' element={<AdminPrivateRoute><AdminEditPrivacyPolicy /></AdminPrivateRoute>} />
+                <Route path='privacy' element={<AdminPrivateRoute><PrivacyPolicyPage /></AdminPrivateRoute>} />
+                <Route path='pages' element={<AdminPrivateRoute><PageSelection /></AdminPrivateRoute>} />
+                <Route path='pages/:identifier' element={<AdminPrivateRoute><DynamicPage /></AdminPrivateRoute>} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
         </Routes>

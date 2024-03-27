@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BASE_URL } from '../../../config';
+import { BASE_URL } from '../../../../config';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const AdminEditPrivacyPolicy = () => {
+const PrivacyPolicyPage = () => {
     const [content, setContent] = useState('');
     const token = localStorage.getItem('token');
     useEffect(() => {
@@ -83,4 +83,4 @@ const AdminEditPrivacyPolicy = () => {
     );
 };
 
-export default AdminEditPrivacyPolicy;
+export default PrivacyPolicyPage;

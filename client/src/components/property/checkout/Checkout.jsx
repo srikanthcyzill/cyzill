@@ -60,12 +60,12 @@ function Checkout() {
 
 
     return (
-        <div className="bg-gray-100 h-screen py-8">
-            <div className="container mx-auto px-4">
-                <h1 className="text-2xl font-semibold mb-4">Cart</h1>
-                <div className="flex flex-col md:flex-row gap-4">
-                    <div className="md:w-3/4">
-                        <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="w-full md:w-3/4 p-4 md:p-10 bg-gray-100">
+                <div className="container mx-auto">
+                    <h1 className="text-2xl font-semibold mb-4">Cart</h1>
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="md:w-3/4">
                             <table className="w-full">
                                 <thead>
                                     <tr>

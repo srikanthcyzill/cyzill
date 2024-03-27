@@ -4,10 +4,9 @@ import { FaDownload } from "react-icons/fa";
 import { DataGrid } from '@mui/x-data-grid';
 import { useGetCustomersQuery } from "../../state/api";
 import Header from "../../components/Header";
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 
 const Customers = () => {
-  const theme = useTheme();
   const { data: customers, isLoading } = useGetCustomersQuery();
 
   const generateCSVData = () => {
@@ -55,7 +54,7 @@ const Customers = () => {
           loading={isLoading || !customers}
           getRowId={(row) => row._id}
           rows={customers || []}
-          columns={columns.map(column => ({ ...column, sortable: true, filterable: true, resizable: true }))}
+          columns={columns}
           checkboxSelection
         />
 

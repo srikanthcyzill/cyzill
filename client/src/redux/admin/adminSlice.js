@@ -18,14 +18,18 @@ const adminSlice = createSlice({
             state.loading = false;
             state.currentAdmin = action.payload;
             state.error = null;
+            localStorage.setItem('token', action.payload.token);
         },
+
         loginFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
         logout: (state) => {
             state.currentAdmin = null;
+            localStorage.removeItem('token');
         },
+
     },
 });
 

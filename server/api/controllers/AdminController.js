@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { errorHandler } from '../utils/error.js';
 import Agent from '../models/AgentModel.js';
+import Contact from '../models/ContactModel.js';
+import Page from '../models/PageModel.js';
 
 
 export const getAdminPage = async (req, res) => {
@@ -61,6 +63,62 @@ export const getContent = async (req, res) => {
     }
 };
 
+export const getPage = async (req, res) => {
+    try {
+        const page = await Page.findOne({ identifier: req.params.identifier });
+        if (!page) {
+            return res.status(404).json({ message: 'Page not found' });
+        }
+        res.json(page);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getPages = async (req, res) => {
+    try {
+        const pages = await Page.find();
+        res.json(pages);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+export const createPage = async (req, res) => {
+    try {
+        const newPage = new Page(req.body);
+        const savedPage = await newPage.save();
+        res.json(savedPage);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const updatePage = async (req, res) => {
+    try {
+        const updatedPage = await Page.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedPage) {
+            return res.status(404).json({ message: 'Page not found' });
+        }
+        res.json(updatedPage);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const deletePage = async (req, res) => {
+    try {
+        const deletedPage = await Page.findByIdAndDelete(req.params.id);
+        if (!deletedPage) {
+            return res.status(404).json({ message: 'Page not found' });
+        }
+        res.json(deletedPage);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 export const createAgent = async (req, res) => {
     try {
         const newAgent = new Agent(req.body);
@@ -91,6 +149,48 @@ export const removeAgent = async (req, res) => {
     }
 };
 
+export const createContact = async (req, res) => {
+    try {
+        const newContact = new Contact(req.body);
+        const savedContact = await newContact.save();
+        res.json(savedContact);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getContacts = async (req, res) => {
+    try {
+        const contacts = await Contact.find();
+        res.json(contacts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const deleteContact = async (req, res) => {
+    try {
+        const deletedContact = await Contact.findByIdAndDelete(req.params.id);
+        if (!deletedContact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+        res.json(deletedContact);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const updateContact = async (req, res) => {
+    try {
+        const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedContact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+        res.json(updatedContact);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 export const login = async (req, res, next) => {
     const { username, password } = req.body;

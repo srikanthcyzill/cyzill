@@ -1,7 +1,6 @@
 import React from "react";
 import {
     Box,
-    Divider,
     Drawer,
     IconButton,
     List,
@@ -12,72 +11,30 @@ import {
     Typography,
     useTheme,
 } from "@mui/material";
-import { MdOutlineHouse, MdOutlineChevronLeft, MdChevronRight, MdHome, MdGroups, MdReceipt, MdOutlinePublic, MdPointOfSale, MdOutlineToday, MdCalendarMonth, MdAdminPanelSettings, MdOutlineTrendingUp, MdPieChart, MdOutlineRealEstateAgent } from "react-icons/md";
+import { MdOutlineHouse, MdOutlineChevronLeft, MdChevronRight, MdHome, MdGroups, MdReceipt, MdPointOfSale, MdOutlineToday, MdCalendarMonth, MdAdminPanelSettings, MdOutlineTrendingUp, MdPieChart, MdOutlineRealEstateAgent, MdEmail } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 
 const navItems = [
-    {
-        text: "Dashboard",
-        icon: <MdHome />,
-    },
-    {
-        text: "Client Facing",
-        icon: null,
-    },
-    {
-        text: "Properties",
-        icon: <MdOutlineHouse />,
-    },
-    {
-        text: "Customers",
-        icon: <MdGroups />,
-    },
-    {
-        text: "Transactions",
-        icon: <MdReceipt />,
-    },
-    {
-        text: "Agents",
-        icon: <MdOutlineRealEstateAgent />,
-    },
-    {
-        text: "Geography",
-        icon: <MdOutlinePublic />,
-    },
-    {
-        text: "Sales",
-        icon: null,
-    },
-    {
-        text: "Overview",
-        icon: <MdPointOfSale />,
-    },
-    {
-        text: "Daily",
-        icon: <MdOutlineToday />,
-    },
-    {
-        text: "Monthly",
-        icon: <MdCalendarMonth />,
-    },
-    {
-        text: "Breakdown",
-        icon: <MdPieChart />,
-    },
-    {
-        text: "Management",
-        icon: null,
-    },
-    {
-        text: "Admin",
-        icon: <MdAdminPanelSettings />,
-    },
-    {
-        text: "Performance",
-        icon: <MdOutlineTrendingUp />,
-    },
+    { text: "Dashboard", path: "dashboard", icon: <MdHome /> },
+    { text: "Client Facing", path: "clientfacing", icon: null },
+    { text: "Properties", path: "properties", icon: <MdOutlineHouse /> },
+    { text: "Customers", path: "customers", icon: <MdGroups /> },
+    { text: "Transactions", path: "transactions", icon: <MdReceipt /> },
+    { text: "Agents", path: "agents", icon: <MdOutlineRealEstateAgent /> },
+    { text: "Leads", path: "leads", icon: <MdEmail /> },
+    { text: "Sales", path: "sales", icon: null },
+    { text: "Overview", path: "overview", icon: <MdPointOfSale /> },
+    { text: "Daily", path: "daily", icon: <MdOutlineToday /> },
+    { text: "Monthly", path: "monthly", icon: <MdCalendarMonth /> },
+    { text: "Breakdown", path: "breakdown", icon: <MdPieChart /> },
+    { text: "Management", path: "management", icon: null },
+    { text: "Admin", path: "admin", icon: <MdAdminPanelSettings /> },
+    { text: "Performance", path: "performance", icon: <MdOutlineTrendingUp /> },
+    { text: "Editor", path: "editor", icon: null },
+    { text: "Pages", path: "pages", icon: <MdOutlineTrendingUp /> },
+    { text: "Admin Pages", path: "adminpages", icon: <MdOutlineTrendingUp /> },
 ];
 
 const Sidebar = ({
@@ -131,7 +88,7 @@ const Sidebar = ({
                             </FlexBetween>
                         </Box>
                         <List>
-                            {navItems.map(({ text, icon }) => {
+                            {navItems.map(({ text, path, icon }) => {
                                 if (!icon) {
                                     return (
                                         <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -139,42 +96,29 @@ const Sidebar = ({
                                         </Typography>
                                     );
                                 }
-                                const lcText = text.toLowerCase();
-
                                 return (
                                     <ListItem key={text} disablePadding>
-                                        <ListItemButton onClick={() => {
-                                            const newPath = `/admin/dashboard/${lcText}`;
-                                            navigate(newPath);
-                                            setActive(lcText);
-                                        }}
-
+                                        <ListItemButton
+                                            onClick={() => {
+                                                const newPath = `/admin/dashboard/${path}`;
+                                                navigate(newPath);
+                                                setActive(path);
+                                            }}
                                             sx={{
-                                                backgroundColor:
-                                                    active === lcText
-                                                        ? theme.palette.secondary[300]
-                                                        : "transparent",
-                                                color:
-                                                    active === lcText
-                                                        ? theme.palette.primary[600]
-                                                        : theme.palette.secondary[100],
+                                                backgroundColor: active === path ? theme.palette.secondary[300] : "transparent",
+                                                color: active === path ? theme.palette.primary[600] : theme.palette.secondary[100],
                                             }}
                                         >
                                             <ListItemIcon
                                                 sx={{
                                                     ml: "2rem",
-                                                    color:
-                                                        active === lcText
-                                                            ? theme.palette.primary[600]
-                                                            : theme.palette.secondary[200],
+                                                    color: active === path ? theme.palette.primary[600] : theme.palette.secondary[200],
                                                 }}
                                             >
                                                 {icon}
                                             </ListItemIcon>
                                             <ListItemText primary={text} />
-                                            {active === lcText && (
-                                                <MdChevronRight sx={{ ml: "auto" }} />
-                                            )}
+                                            {active === path && <MdChevronRight sx={{ ml: "auto" }} />}
                                         </ListItemButton>
                                     </ListItem>
                                 );

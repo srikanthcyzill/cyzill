@@ -58,20 +58,36 @@ const Payment = ({ formData, saveFormData }) => {
     };
 
     return (
-        <div className="flex">
-            <div className="w-1/2 p-4">
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="w-full md:w-1/2 p-4 md:p-10">
                 <h2 className="text-2xl font-semibold mb-4">Payment Details</h2>
                 <label className="flex flex-col">
                     Price in INR(₹)
-                    <input type="number" name="price" value={price} onChange={(e) => handleInputChange(e, setPrice)} className="mt-1 p-2 border rounded-md" />
+                    <input
+                        type="number"
+                        name="price"
+                        value={price}
+                        onChange={(e) => handleInputChange(e, setPrice)}
+                        className="mt-1 p-2 border rounded-md"
+                    />
                 </label>
                 <label className="flex flex-col">
                     Advance Deposit
-                    <input type="number" name="advanceDeposit" value={advanceDeposit} onChange={(e) => handleInputChange(e, setAdvanceDeposit)} className="mt-1 p-2 border rounded-md" />
+                    <input
+                        type="number"
+                        name="advanceDeposit"
+                        value={advanceDeposit}
+                        onChange={(e) => handleInputChange(e, setAdvanceDeposit)}
+                        className="mt-1 p-2 border rounded-md"
+                    />
                 </label>
                 <label className="flex flex-col">
                     Price Includes:
-                    <select value={priceIncludes} onChange={handlePriceIncludesChange} className="mt-1 p-2 border rounded-md">
+                    <select
+                        value={priceIncludes}
+                        onChange={handlePriceIncludesChange}
+                        className="mt-1 p-2 border rounded-md"
+                    >
                         <option value="">Select...</option>
                         <option value="Fixed">Fixed</option>
                         <option value="Negotiable">Negotiable</option>
@@ -80,21 +96,37 @@ const Payment = ({ formData, saveFormData }) => {
                 </label>
                 <label className="flex flex-col">
                     Maintenance Charges per Month
-                    <input type="number" name="maintenanceCharges" value={maintenanceCharges} onChange={(e) => handleInputChange(e, setMaintenanceCharges)} className="mt-1 p-2 border rounded-md" />
+                    <input
+                        type="number"
+                        name="maintenanceCharges"
+                        value={maintenanceCharges}
+                        onChange={(e) => handleInputChange(e, setMaintenanceCharges)}
+                        className="mt-1 p-2 border rounded-md"
+                    />
                 </label>
                 <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="excludeStampDuty" checked={excludeStampDuty} onChange={handleCheckboxChange} className="form-checkbox" />
+                    <input
+                        type="checkbox"
+                        name="excludeStampDuty"
+                        checked={excludeStampDuty}
+                        onChange={handleCheckboxChange}
+                        className="form-checkbox"
+                    />
                     <span>Exclude Stamp Duty and Registration Charges</span>
                 </label>
                 <p>{status}</p>
-                <button onClick={handleSubmit} disabled={submitting} className={`mt-4 p-2 text-white rounded-md mx-auto block ${submitting ? 'bg-blue-300' : 'bg-blue-500'}`}>
+                <button
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                    className={`mt-4 p-2 text-white rounded-md mx-auto block ${submitting ? 'bg-blue-300' : 'bg-blue-500'
+                        }`}
+                >
                     {submitting ? 'Submitting...' : 'Submit'}
                 </button>
-
             </div>
-            <div className="w-1/2 p-4"></div>
         </div>
     );
+
 };
 
 export default Payment;

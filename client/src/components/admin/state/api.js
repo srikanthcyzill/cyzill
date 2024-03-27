@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BASE_URL } from "../../../config";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: process.env.REACT_APP_BASE_URL,
+        baseUrl: BASE_URL,
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('token');
             if (token) {
@@ -22,6 +23,7 @@ export const api = createApi({
         "Admins",
         "Performance",
         "Dashboard",
+        "Pages",
     ],
     endpoints: (build) => ({
         getUser: build.query({
@@ -35,6 +37,51 @@ export const api = createApi({
         getCustomers: build.query({
             query: () => "api/user",
             providesTags: ["Customers"],
+        }),
+        getLeads: build.query({
+            query: () => 'api/admin/contact',
+            providesTags: ['Leads'],
+        }),
+        deleteLead: build.mutation({
+            query: (id) => ({
+                url: `api/admin/contact/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Leads'],
+        }),
+        updateLeadStatus: build.mutation({
+            query: ({ id, status }) => ({
+                url: `api/admin/contact/${id}`,
+                method: 'PATCH',
+                body: { status },
+            }),
+            invalidatesTags: ['Leads'],
+        }),
+        getPage: build.query({
+            query: (identifier) => `api/admin/page/${identifier}`,
+        }),
+        getPages: build.query({
+            query: () => 'api/admin/pages',
+        }),
+        createPage: build.mutation({
+            query: (page) => ({
+                url: 'api/admin/page',
+                method: 'POST',
+                body: page,
+            }),
+        }),
+        updatePage: build.mutation({
+            query: ({ id, page }) => ({
+                url: `api/admin/page/${id}`,
+                method: 'PUT',
+                body: page,
+            }),
+        }),
+        deletePage: build.mutation({
+            query: (id) => ({
+                url: `api/admin/page/${id}`,
+                method: 'DELETE',
+            }),
         }),
         getTransactions: build.query({
             query: ({ page, pageSize, sort, search }) => ({
@@ -62,6 +109,23 @@ export const api = createApi({
                 method: 'DELETE',
             }),
             invalidatesTags: ['Agents'],
+        }),
+        getContent: build.query({
+            query: () => 'api/admin/content',
+        }),
+        updateContent: build.mutation({
+            query: (newContent) => ({
+                url: 'api/admin/content/privacy-policy',
+                method: 'PUT',
+                body: newContent,
+            }),
+        }),
+        createContent: build.mutation({
+            query: (initialContent) => ({
+                url: 'api/admin/content',
+                method: 'POST',
+                body: initialContent,
+            }),
         }),
         getGeography: build.query({
             query: () => "client/geography",
@@ -99,5 +163,13 @@ export const {
     useAddAgentMutation,
     useGetAgentsQuery,
     useRemoveAgentMutation,
+    useGetLeadsQuery,
+    useDeleteLeadMutation,
+    useUpdateLeadStatusMutation,
+    useGetPageQuery,
+    useCreatePageMutation,
+    useUpdatePageMutation,
+    useDeletePageMutation,
+    useGetPagesQuery,
 } = api;
 

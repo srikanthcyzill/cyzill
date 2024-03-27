@@ -5,10 +5,10 @@ const PrivacyPolicyTest = () => {
     const [content, setContent] = useState('');
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/admin/content/privacy-policy`) // fetch content by identifier
+        fetch(`${BASE_URL}/api/admin/content/privacy-policy`)
             .then(response => response.json())
             .then(data => {
-                setContent(data.body); // use the 'body' field of the data
+                setContent(data.body);
             })
             .catch(error => {
                 console.error('Failed to fetch privacy policy content:', error);

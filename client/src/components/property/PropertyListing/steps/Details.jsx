@@ -62,8 +62,8 @@ const Details = ({ formData, saveFormData }) => {
     };
 
     return (
-        <div className="mx-auto p-10 grid grid-cols-2 gap-6">
-            <div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '1rem' }}>
+            <div className="mx-auto p-10 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <h2 className="text-2xl font-semibold mb-4">Property Details</h2>
                 <div className="mb-4">
                     <label className="block mb-1 font-medium">Bedrooms</label>

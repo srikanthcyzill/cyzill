@@ -3,6 +3,7 @@ import { MdOutlineMenu, MdSearch, MdOutlineSettings, MdArrowDownward } from "rea
 import FlexBetween from "./FlexBetween";
 import { useDispatch } from "react-redux";
 import { setMode } from "state";
+import { logout } from '../../../redux/admin/adminSlice';
 import profileImage from "../assets/profile.jpeg";
 import {
     AppBar,
@@ -89,7 +90,10 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                             onClose={handleClose}
                             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                         >
-                            <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                            <MenuItem onClick={() => {
+                                dispatch(logout());
+                                handleClose();
+                            }}>Log Out</MenuItem>
                         </Menu>
                     </FlexBetween>
                 </FlexBetween>

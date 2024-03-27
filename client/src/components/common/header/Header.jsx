@@ -39,7 +39,7 @@ const Header = () => {
         { name: "Add New Listings", link: "/property-listing" },
         { name: "My Properties", link: "/listed-properties" },
         { name: "Saved", link: "/saved" },
-        "Log Out",
+        currentUser ? "Log Out" : { name: "Login", link: "/login" },
     ];
 
 
