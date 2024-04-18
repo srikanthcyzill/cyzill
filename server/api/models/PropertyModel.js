@@ -91,16 +91,11 @@ const propertySchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    propertyStatus: {
-        type: String,
-        enum: ['none', 'bronze', 'silver', 'gold', 'platinum'],
-        default: 'none'
-    },
     soldStatus: {
         type: Boolean,
         default: false,
     },
-    licenseCardStatus: {
+    propertyStatus: {
         paymentDate: { type: Date },
         plan: { type: String, enum: ['none', 'bronze', 'silver', 'gold', 'platinum'], default: 'none' }
     },

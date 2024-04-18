@@ -1,7 +1,8 @@
 import express from 'express';
-import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages } from '../controllers/AdminController.js';
+import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages, getAllTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction, getFiles, getFile, addFile, updateFile, deleteFile } from '../controllers/AdminController.js';
 import { authenticateJWT } from '../middleware/authenticate.js';
 import { createPlan, deletePlan, getPlans, updatePlan } from '../controllers/PlanController.js';
+import { getAdmins, createAdmin, updateAdmin, deleteAdmin } from '../controllers/AdminController.js';
 
 const router = express.Router();
 
@@ -28,5 +29,19 @@ router.get('/pages', getPages);
 router.post('/page', authenticateJWT, createPage);
 router.put('/page/:id', authenticateJWT, updatePage);
 router.delete('/page/:id', authenticateJWT, deletePage);
+router.get('/transactions', authenticateJWT, getAllTransactions);
+router.get('/transactions/:id', authenticateJWT, getTransaction);
+router.post('/transactions', authenticateJWT, createTransaction);
+router.put('/transactions/:id', authenticateJWT, updateTransaction);
+router.delete('/transactions/:id', authenticateJWT, deleteTransaction);
+router.get('/admins', authenticateJWT, getAdmins);
+router.post('/admins', authenticateJWT, createAdmin);
+router.put('/admins/:id', authenticateJWT, updateAdmin);
+router.delete('/admins/:id', authenticateJWT, deleteAdmin);
+router.get('/files', getFiles);
+router.get('/files/:id', getFile);
+router.post('/files', authenticateJWT, addFile);
+router.put('/files/:id', authenticateJWT, updateFile);
+router.delete('/files/:id', authenticateJWT, deleteFile);
 
 export default router;

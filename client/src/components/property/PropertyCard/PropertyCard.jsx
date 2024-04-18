@@ -29,6 +29,9 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete, sale
 
     const handleLikeClick = async (e) => {
         e.stopPropagation();
+        if (e.target.closest('.phonepe-payment-gateway')) {
+            return;
+        }
         if (!currentUser || !currentUser._id) {
             console.log('User not logged in, redirecting to signup');
             navigate('/signup');
@@ -69,6 +72,7 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete, sale
     };
 
     const handleCardClick = (e) => {
+        e.stopPropagation();
         if (!e.target.closest('.toggler-icon')) {
             if (smallSize) {
                 onPropertyClick();
@@ -78,10 +82,14 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete, sale
             }
         }
     };
+    if (!property || !property.username) {
+        return <div>No property data</div>;
+    }
 
     const isOwner = currentUser && property.username === currentUser.username;
     return (
-        <div className="property-card" key={property._id} onClick={handleCardClick}>
+        <div className="property-card" key={property._id} onClick={handleCardClick} style={{ position: 'relative' }}>
+            {isOwner && <OwnerActions property={property} handleDelete={handleDelete} />}
             <PropertyImage property={property} activeImageIndex={activeImageIndex} handleToggleClick={handleToggleClick} />
             <div className="property-info">
                 <PropertyDetails property={property} isLiked={isLiked} handleLikeClick={handleLikeClick} saleOrRent={saleOrRent} />
@@ -89,7 +97,6 @@ const PropertyCard = ({ property, smallSize, onPropertyClick, handleDelete, sale
                 <LocationDetails property={property} />
                 <AgentDetails property={property} />
             </div>
-            {isOwner && <OwnerActions property={property} handleDelete={handleDelete} />}
         </div>
     );
 };

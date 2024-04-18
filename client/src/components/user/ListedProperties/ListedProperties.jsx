@@ -1,9 +1,12 @@
+// ListedProperties.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlusCircle, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiPlusCircle } from 'react-icons/fi';
 import { BASE_URL } from '../../../config';
 import useCurrencyFormatter from '../../../utils/useCurrencyFormatter';
 import PropertyCard from '../../property/PropertyCard/PropertyCard';
+import PropertyActions from './PropertyActions'; // Import the PropertyActions component
+import EditProperty from './EditProperty'; // Import the EditProperty component
 
 const ListedProperties = ({ username }) => {
     const [properties, setProperties] = useState([]);
@@ -27,7 +30,12 @@ const ListedProperties = ({ username }) => {
         if (response.ok) {
             setProperties(properties.filter((property) => property._id !== propertyId));
         } else {
+            // Handle error
         }
+    };
+
+    const handlePay = async (propertyId) => {
+        // Handle payment logic here
     };
 
     return (
@@ -41,12 +49,15 @@ const ListedProperties = ({ username }) => {
             </div>
             <div className="grid lg:grid-cols-4 gap-4 md:grid-cols-3 sm:grid-cols-2">
                 {properties.map((property) => (
-                    <PropertyCard
-                        key={property._id}
-                        property={property}
-                        formatter={formatter}
-                        handleDelete={handleDelete}
-                    />
+                    <div key={property._id}>
+                        <PropertyCard property={property} formatter={formatter} />
+                        <PropertyActions
+                            propertyId={property._id}
+                            onDelete={handleDelete}
+                            onPay={handlePay}
+                        />
+                        <EditProperty propertyId={property._id} />
+                    </div>
                 ))}
             </div>
         </div>

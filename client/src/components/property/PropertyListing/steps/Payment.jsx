@@ -34,7 +34,7 @@ const Payment = ({ formData, saveFormData }) => {
                 spread: 70,
                 origin: { y: 0.6 }
             });
-            navigate('/checkout', { state: { formData } });
+            navigate('/listed-properties', { state: { formData } });
         } else {
             console.error('Error saving data');
             setStatus('Error saving data');

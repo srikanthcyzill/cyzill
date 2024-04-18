@@ -2,9 +2,6 @@ import React from 'react';
 import { AiOutlineClose, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 const ImageGallery = ({ images, activeImage, setActiveImage, setShowGallery }) => {
-    const handleImageClick = (index) => {
-        setActiveImage(index);
-    };
 
     const handleCloseGallery = () => {
         setShowGallery(false);
@@ -31,8 +28,9 @@ const ImageGallery = ({ images, activeImage, setActiveImage, setShowGallery }) =
                         <img
                             className="w-full h-full object-cover"
                             src={images[activeImage]}
-                            alt={`Image ${activeImage + 1}`}
+                            alt={`Property ${activeImage + 1}`}
                         />
+
                     </div>
                     <div className="flex justify-between items-center absolute bottom-1/2 w-full">
                         <button onClick={handlePrevImage} className="text-white"><AiOutlineLeft className="text-3xl" /></button>

@@ -14,3 +14,8 @@ export const setLikedProperties = (properties) => {
     console.log('Dispatching SET_LIKED_PROPERTIES action');
     return { type: SET_LIKED_PROPERTIES, payload: properties };
 };
+
+export const updatePropertyFormData = (formData) => ({
+    type: 'UPDATE_PROPERTY_FORM_DATA',
+    payload: formData,
+});

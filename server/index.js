@@ -7,6 +7,7 @@ import userRouter from './api/routes/Users.route.js';
 import authRouter from './api/routes/Auth.route.js';
 import listingRouter from './api/routes/Property.route.js';
 import adminRoutes from './api/routes/Admin.route.js';
+import PhonePeRoutes from './api/routes/PhonePeRoutes.js';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 
@@ -43,6 +44,7 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/property', listingRouter);
 app.use('/api/admin', adminRoutes);
+app.use('/api', PhonePeRoutes);
 
 app.get("/api", function (req, res) {
     res.json({ message: "Cyzill api" });

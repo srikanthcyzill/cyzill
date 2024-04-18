@@ -6,14 +6,14 @@ import { Box } from "@mui/material";
 import Switch from '@mui/material/Switch';
 
 const Leads = () => {
-    const { data: leads, isLoading, refetch } = useGetLeadsQuery(); // get the refetch function from useGetLeadsQuery
+    const { data: leads, isLoading, refetch } = useGetLeadsQuery();
     const [deleteLead] = useDeleteLeadMutation();
     const [updateLeadStatus] = useUpdateLeadStatusMutation();
 
     const handleDelete = async (id) => {
         try {
             await deleteLead(id);
-            refetch(); // refetch the leads after deleting a lead
+            refetch();
         } catch (err) {
             console.error('Error deleting lead:', err);
         }

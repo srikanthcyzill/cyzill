@@ -24,12 +24,41 @@ export const api = createApi({
         "Performance",
         "Dashboard",
         "Pages",
+        "Files",
     ],
     endpoints: (build) => ({
+        getPlans: build.query({
+            query: () => 'api/admin/plans',
+            providesTags: ['Plans'],
+        }),
+        createPlan: build.mutation({
+            query: (newPlan) => ({
+                url: 'api/admin/plans',
+                method: 'POST',
+                body: newPlan,
+            }),
+            invalidatesTags: ['Plans'],
+        }),
+        updatePlan: build.mutation({
+            query: ({ id, updatedPlan }) => ({
+                url: `api/admin/plans/${id}`,
+                method: 'PUT',
+                body: updatedPlan,
+            }),
+            invalidatesTags: ['Plans'],
+        }),
+        deletePlan: build.mutation({
+            query: (id) => ({
+                url: `api/admin/plans/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Plans'],
+        }),
         getUser: build.query({
             query: (id) => `general/user/${id}`,
             providesTags: ["User"],
         }),
+
         getProperties: build.query({
             query: () => "api/property/properties",
             providesTags: ["Properties"],
@@ -136,9 +165,33 @@ export const api = createApi({
             providesTags: ["Sales"],
         }),
         getAdmins: build.query({
-            query: () => "management/admins",
+            query: () => 'api/admin/admins',
             providesTags: ["Admins"],
         }),
+        createAdmin: build.mutation({
+            query: (newAdmin) => ({
+                url: 'api/admin/admins',
+                method: 'POST',
+                body: newAdmin,
+            }),
+            invalidatesTags: ['Admins'],
+        }),
+        updateAdmin: build.mutation({
+            query: ({ id, updatedAdmin }) => ({
+                url: `api/admin/admins/${id}`,
+                method: 'PUT',
+                body: updatedAdmin,
+            }),
+            invalidatesTags: ['Admins'],
+        }),
+        deleteAdmin: build.mutation({
+            query: (id) => ({
+                url: `api/admin/admins/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Admins'],
+        }),
+
         getUserPerformance: build.query({
             query: (id) => `management/performance/${id}`,
             providesTags: ["Performance"],
@@ -146,6 +199,37 @@ export const api = createApi({
         getDashboard: build.query({
             query: () => "general/dashboard",
             providesTags: ["Dashboard"],
+        }),
+        getFiles: build.query({
+            query: () => 'api/admin/files',
+            providesTags: ['Files'],
+        }),
+        getFile: build.query({
+            query: (id) => `api/admin/files/${id}`,
+            providesTags: ['Files'],
+        }),
+        addFile: build.mutation({
+            query: (newFile) => ({
+                url: 'api/admin/files',
+                method: 'POST',
+                body: newFile,
+            }),
+            invalidatesTags: ['Files'],
+        }),
+        updateFile: build.mutation({
+            query: ({ id, updatedFile }) => ({
+                url: `api/admin/files/${id}`,
+                method: 'PUT',
+                body: updatedFile,
+            }),
+            invalidatesTags: ['Files'],
+        }),
+        deleteFile: build.mutation({
+            query: (id) => ({
+                url: `api/admin/files/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Files'],
         }),
     }),
 });
@@ -158,6 +242,9 @@ export const {
     useGetGeographyQuery,
     useGetSalesQuery,
     useGetAdminsQuery,
+    useCreateAdminMutation,
+    useUpdateAdminMutation,
+    useDeleteAdminMutation,
     useGetUserPerformanceQuery,
     useGetDashboardQuery,
     useAddAgentMutation,
@@ -171,5 +258,14 @@ export const {
     useUpdatePageMutation,
     useDeletePageMutation,
     useGetPagesQuery,
+    useGetPlansQuery,
+    useCreatePlanMutation,
+    useUpdatePlanMutation,
+    useDeletePlanMutation,
+    useGetFilesQuery,
+    useGetFileQuery,
+    useAddFileMutation,
+    useUpdateFileMutation,
+    useDeleteFileMutation,
 } = api;
 

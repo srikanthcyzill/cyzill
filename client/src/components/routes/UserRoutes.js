@@ -33,6 +33,9 @@ import Leads from '../admin/scenes/leads/Leads';
 import PrivacyPolicyPage from '../admin/scenes/pages/PrivacyPolicyPage';
 import DynamicPage from '../admin/scenes/pages/DynamicPage';
 import PageSelection from '../admin/scenes/pages/PagesSelection';
+import Plans from '../admin/scenes/plans/Plans';
+import Admins from '../admin/scenes/admins/Admins';
+import AdsSection from '../admin/scenes/uploads/AdsSection';
 
 const UserRoutes = () => {
     const currentUser = useSelector(state => state.user.currentUser);
@@ -66,8 +69,10 @@ const UserRoutes = () => {
                 <Route path='leads' element={<AdminPrivateRoute><Leads /></AdminPrivateRoute>} />
                 <Route path='users' element={<AdminPrivateRoute><AllUsers /></AdminPrivateRoute>} />
                 <Route path='properties' element={<AdminPrivateRoute><Properties /></AdminPrivateRoute>} />
-                <Route path='plans' element={<AdminPrivateRoute><EditPlans /></AdminPrivateRoute>} />
-                <Route path='agents' element={<AdminPrivateRoute><AddAgents /></AdminPrivateRoute>} />
+                <Route path='plans' element={<AdminPrivateRoute><Plans /></AdminPrivateRoute>} />
+                <Route path='plans' element={<AdminPrivateRoute><Plans /></AdminPrivateRoute>} />
+                <Route path='admins' element={<AdminPrivateRoute><Admins /></AdminPrivateRoute>} />
+                <Route path='uploads' element={<AdminPrivateRoute><AdsSection /></AdminPrivateRoute>} />
                 <Route path='privacy' element={<AdminPrivateRoute><PrivacyPolicyPage /></AdminPrivateRoute>} />
                 <Route path='pages' element={<AdminPrivateRoute><PageSelection /></AdminPrivateRoute>} />
                 <Route path='pages/:identifier' element={<AdminPrivateRoute><DynamicPage /></AdminPrivateRoute>} />

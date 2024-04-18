@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { Button, Image, Input } from '@nextui-org/react';
+import { BASE_URL } from '../../../config';
 
 const Profile = () => {
     const { currentUser } = useSelector(state => state.user);
@@ -23,10 +23,31 @@ const Profile = () => {
     }, [dispatch]);
 
     const handleUpdateProfile = async () => {
-        // const newPhotoURL = newPhoto ? await uploadImage(newPhoto) : photo;
-        // dispatch(updateUserProfile({ username, email, phoneNumber, photo: newPhotoURL }));
-    };
+        try {
+            // Get the token from localStorage
+            const token = localStorage.getItem('token');
 
+            // Update the MongoDB database
+            const response = await fetch(`${BASE_URL}/api/user/update/${currentUser._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Use the token from localStorage
+                },
+                body: JSON.stringify({
+                    username: username,
+                }),
+            });
+
+            if (response.ok) {
+                console.log('Profile updated successfully');
+            } else {
+                console.log('Error updating profile:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error.message);
+        }
+    };
 
     const handleUpdatePassword = () => {
         if (newPassword === confirmPassword) {
@@ -83,5 +104,3 @@ const renderPasswordInput = (label, value, onChange, id) => (
 );
 
 export default Profile;
-
-

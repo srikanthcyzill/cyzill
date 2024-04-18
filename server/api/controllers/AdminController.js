@@ -6,6 +6,7 @@ import { errorHandler } from '../utils/error.js';
 import Agent from '../models/AgentModel.js';
 import Contact from '../models/ContactModel.js';
 import Page from '../models/PageModel.js';
+import File from '../models/FileModel.js';
 
 
 export const getAdminPage = async (req, res) => {
@@ -191,6 +192,65 @@ export const updateContact = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+// Route for admins to get all transactions
+export const getAllTransactions = async (req, res) => {
+    try {
+        const transactions = await Transaction.find();
+        res.json(transactions);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Route for admins to get a specific transaction
+export const getTransaction = async (req, res) => {
+    try {
+        const transaction = await Transaction.findById(req.params.id);
+        if (!transaction) {
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+        res.json(transaction);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Route for admins to create a new transaction
+export const createTransaction = async (req, res) => {
+    try {
+        const newTransaction = new Transaction(req.body);
+        const savedTransaction = await newTransaction.save();
+        res.json(savedTransaction);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Route for admins to update a transaction
+export const updateTransaction = async (req, res) => {
+    try {
+        const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedTransaction) {
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+        res.json(updatedTransaction);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Route for admins to delete a transaction
+export const deleteTransaction = async (req, res) => {
+    try {
+        const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
+        if (!deletedTransaction) {
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+        res.json(deletedTransaction);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 export const login = async (req, res, next) => {
     const { username, password } = req.body;
@@ -216,6 +276,119 @@ export const logout = (req, res) => {
     try {
         res.clearCookie('token');
         res.json({ message: 'Logged out successfully' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Get all admins
+export const getAdmins = async (req, res) => {
+    try {
+        const admins = await Admin.find();
+        res.json(admins);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Create a new admin
+export const createAdmin = async (req, res) => {
+    try {
+        const newAdmin = new Admin(req.body);
+        const savedAdmin = await newAdmin.save();
+        res.json(savedAdmin);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Update an existing admin
+export const updateAdmin = async (req, res) => {
+    try {
+        const updatedAdmin = await Admin.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedAdmin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+        res.json(updatedAdmin);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Delete an admin
+export const deleteAdmin = async (req, res) => {
+    try {
+        const deletedAdmin = await Admin.findByIdAndDelete(req.params.id);
+        if (!deletedAdmin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+        res.json(deletedAdmin);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+// Add a new file
+export const addFile = async (req, res) => {
+    const { filename, firebaseUrl } = req.body;
+    const newFile = new File({
+        filename,
+        firebaseUrl
+    });
+
+    try {
+        const savedFile = await newFile.save();
+        res.status(201).json(savedFile);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Update an existing file
+export const updateFile = async (req, res) => {
+    const { filename, firebaseUrl } = req.body;
+
+    try {
+        const updatedFile = await File.findByIdAndUpdate(req.params.id, { filename, firebaseUrl }, { new: true });
+        if (!updatedFile) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+        res.json(updatedFile);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Delete a file
+export const deleteFile = async (req, res) => {
+    try {
+        const deletedFile = await File.findByIdAndDelete(req.params.id);
+        if (!deletedFile) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+        res.json(deletedFile);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Get all files
+export const getFiles = async (req, res) => {
+    try {
+        const files = await File.find();
+        res.json(files);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Get a specific file
+export const getFile = async (req, res) => {
+    try {
+        const file = await File.findById(req.params.id);
+        if (!file) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+        res.json(file);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

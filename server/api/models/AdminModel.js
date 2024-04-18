@@ -4,8 +4,11 @@ import bcrypt from 'bcrypt';
 const adminSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
         unique: true,
+    },
+    name: {
+        type: String,
+        required: true,
     },
     email: {
         type: String,
@@ -16,6 +19,10 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        required: true,
+    }
 }, { timestamps: true });
 
 adminSchema.pre('save', async function (next) {
