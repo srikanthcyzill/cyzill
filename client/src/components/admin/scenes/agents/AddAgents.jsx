@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Paper, Typography, TextField, Button, Avatar } from '@material-ui/core';
-import { useAddAgentMutation, useGetAgentsQuery, useRemoveAgentMutation } from '../../state/api';
+import { Paper, Typography, TextField, Button, Avatar, Switch } from '@material-ui/core';
+import { useAddAgentMutation, useGetAgentsQuery, useRemoveAgentMutation, useUpdateAgentStatusMutation } from '../../state/api';
 import { MdDeleteForever } from 'react-icons/md';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDropzone } from 'react-dropzone';
@@ -16,11 +16,13 @@ const AddAgents = () => {
     const [serviceArea, setServiceArea] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
     const [isSaving, setIsSaving] = useState(false);
-    const [agentPhoto, setAgentPhoto] = useState([]);
+    const [agentPhoto, setAgentPhoto] = useState(null);
     const [officePhotos, setOfficePhotos] = useState([]);
     const [addAgent] = useAddAgentMutation();
     const { data: agents, isLoading: isFetchingAgents, refetch } = useGetAgentsQuery();
     const [removeAgent] = useRemoveAgentMutation();
+    const [updateAgentStatus] = useUpdateAgentStatusMutation();
+
 
     const { getRootProps: getAgentPhotoRootProps, getInputProps: getAgentPhotoInputProps, isDragActive: isAgentPhotoDragActive } = useDropzone({
         onDrop: (files) => onDrop(files, 'photo')
@@ -29,6 +31,12 @@ const AddAgents = () => {
     const { getRootProps: getOfficePhotosRootProps, getInputProps: getOfficePhotosInputProps, isDragActive: isOfficePhotosDragActive } = useDropzone({
         onDrop: (files) => onDrop(files, 'officePhotos')
     });
+
+    const handleToggle = async (agent) => {
+        const newStatus = agent.status === 'active' ? 'inactive' : 'active';
+        await updateAgentStatus({ id: agent._id, status: newStatus });
+        refetch();
+    };
 
     const columns = [
         { field: 'agentName', headerName: 'Agent Name', flex: 1 },
@@ -46,7 +54,17 @@ const AddAgents = () => {
                 </button>
             ),
         },
-
+        {
+            field: 'status',
+            headerName: 'Status',
+            renderCell: (params) => (
+                <Switch
+                    checked={params.row.status === 'active'}
+                    onChange={() => handleToggle(params.row)}
+                    color="primary"
+                />
+            ),
+        },
     ];
 
     const handleAgentPhotoChange = (e) => {
@@ -59,7 +77,16 @@ const AddAgents = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            const response = await addAgent({ agentName, agencyName, phoneNumber, officeAddress, pincode, serviceArea });
+            const response = await addAgent({
+                agentName,
+                agencyName,
+                phoneNumber,
+                officeAddress,
+                pincode,
+                serviceArea,
+                photo: agentPhoto ? agentPhoto.url : null,
+                officePhotos: officePhotos.map(file => file.url),
+            });
             if (response.error) {
                 throw new Error('Failed to add agent');
             }
@@ -72,29 +99,22 @@ const AddAgents = () => {
         }
     };
 
-    const onDrop = useCallback(async (acceptedFiles) => {
+    const onDrop = useCallback(async (acceptedFiles, type) => {
         const storage = getStorage(app);
         const filePromises = acceptedFiles.map(async (file) => {
-            let folder = '';
-            if (file.type.startsWith('image/')) {
-                folder = 'photo';
-            } else if (file.type.startsWith('video/')) {
-                folder = 'officePhotos';
-            }
-            const filePath = `agents/${agentName}/${folder}/${file.name}`;
+            const filePath = `agents/${agentName}/${type}/${file.name}`;
             const storageRef = ref(storage, filePath);
             await uploadBytes(storageRef, file);
             const url = await getDownloadURL(storageRef);
-            return { url, path: filePath, type: folder };
+            return { url, path: filePath };
         });
-        try {
-            const files = await Promise.all(filePromises);
-            setAgentPhoto((prevMedia) => [...prevMedia, ...files.filter(file => file.type === 'photo')]);
-            setOfficePhotos((prevMedia) => [...prevMedia, ...files.filter(file => file.type === 'officePhotos')]);
-        } catch (error) {
-            console.error('Error uploading file:', error.message);
+        const files = await Promise.all(filePromises);
+        if (type === 'photo') {
+            setAgentPhoto(files[0]);
+        } else {
+            setOfficePhotos(files);
         }
-    }, [agentPhoto, officePhotos]);
+    }, [agentName]);
 
     const removeFile = (index, type) => {
         const file = type === 'photo' ? agentPhoto[index] : officePhotos[index];
@@ -182,10 +202,10 @@ const AddAgents = () => {
                         {isAgentPhotoDragActive ? <p className=''>Drop the agent photo here ...</p> : <div><p className='text-md text-gray-500'>Upload Agent Photo</p></div>}
                     </div>
                     <div className="image-container">
-                        {agentPhoto[0] && (
+                        {agentPhoto && (
                             <div className="mb-2 relative">
-                                <Avatar src={agentPhoto[0].url} alt="Agent Photo" className="w-full h-32 object-cover" />
-                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 " onClick={() => removeFile(0, 'photo')} />
+                                <Avatar src={agentPhoto.url} alt="Agent Photo" className="w-full h-32 object-cover" />
+                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 " onClick={() => setAgentPhoto(null)} />
                             </div>
                         )}
                     </div>

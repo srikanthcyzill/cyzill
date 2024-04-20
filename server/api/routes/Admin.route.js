@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages, getAllTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction, getFiles, getFile, addFile, updateFile, deleteFile } from '../controllers/AdminController.js';
+import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages, getAllTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction, getFiles, getFile, addFile, updateFile, deleteFile, updateAgentStatus } from '../controllers/AdminController.js';
 import { authenticateJWT } from '../middleware/authenticate.js';
 import { createPlan, deletePlan, getPlans, updatePlan } from '../controllers/PlanController.js';
 import { getAdmins, createAdmin, updateAdmin, deleteAdmin } from '../controllers/AdminController.js';
@@ -20,6 +20,7 @@ router.delete('/plans/:id', authenticateJWT, deletePlan);
 router.post('/agent', authenticateJWT, createAgent);
 router.get('/agent', getAgents);
 router.delete('/agent/:id', authenticateJWT, removeAgent);
+router.patch('/agent/:id/status', authenticateJWT, updateAgentStatus);
 router.post('/contact', authenticateJWT, createContact);
 router.get('/contact', authenticateJWT, getContacts);
 router.delete('/contact/:id', authenticateJWT, deleteContact);

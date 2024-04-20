@@ -47,19 +47,21 @@ const FindAgents = () => {
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
-            <div>
+            <div className="grid lg:grid-cols-4 gap-4 md:grid-cols-3 sm:grid-cols-2">
                 {agents
                     .filter(agent =>
-                        (agent.agentName && agent.agentName.toLowerCase().includes(search.toLowerCase())) ||
-                        (agent.agencyName && agent.agencyName.toLowerCase().includes(search.toLowerCase())) ||
-                        (agent.serviceArea && agent.serviceArea.toLowerCase().includes(search.toLowerCase()))
+                        agent.status === 'active' &&
+                        ((agent.agentName && agent.agentName.toLowerCase().includes(search.toLowerCase())) ||
+                            (agent.agencyName && agent.agencyName.toLowerCase().includes(search.toLowerCase())) ||
+                            (agent.serviceArea && agent.serviceArea.toLowerCase().includes(search.toLowerCase())))
                     )
                     .map((agent) => (
-                        <AgentCard key={agent.id} agent={agent} />
+                        <div className="agent-card" key={agent.id}>
+                            <AgentCard className="w-full" agent={agent} />
+                        </div>
                     ))}
             </div>
         </div>
-
     );
 };
 

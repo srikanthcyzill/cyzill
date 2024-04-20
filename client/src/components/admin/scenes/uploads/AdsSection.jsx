@@ -2,12 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../../../firebase.js';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { useAddFileMutation, useDeleteFileMutation, useGetFilesQuery } from '../../state/api';
 
 const AdsSection = () => {
@@ -36,13 +33,12 @@ const AdsSection = () => {
                     return file;
                 });
                 const filesWithUrls = await Promise.all(urlPromises);
+                setMedia([]);
                 setMedia(filesWithUrls);
             }
         };
-
         fetchImages();
     }, [adFiles]);
-
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -79,8 +75,6 @@ const AdsSection = () => {
             const storageRef = ref(storage, filePath);
             await uploadBytes(storageRef, file);
             const url = await getDownloadURL(storageRef);
-
-            // Save the file data to MongoDB using your mutation
             await addAdFile({ filename: file.name, firebaseUrl: url });
 
             return { url, path: filePath, type: folder };
@@ -111,38 +105,37 @@ const AdsSection = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     if (isLoading) {
         return <div>Loading...</div>;
-
     }
 
+    var settings = {
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 7000,
+        pauseOnHover: true
+    };
+
     return (
-        <div className=" p-6">
+        <div className="p-6">
             <h2 className="text-2xl font-semibold mb-4 text-center w-full">Upload your ads</h2>
             <div {...getRootProps()} className="flex flex-col items-center justify-center p-4 border-2 border-dashed">
                 <input {...getInputProps()} accept="image/*,video/*" />
                 <p className="text-md text-gray-500">PNG, JPG, JPEG, MP4, WebM up to 20MB</p>
             </div>
-            <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                spaceBetween={50}
-                slidesPerView={1} // Show only one image at a time
-                navigation
-                pagination={{ clickable: true }}
-                scrollbar={{ draggable: true }}
-                className="w-full h-auto"
-                autoplay={{ delay: 7000 }} // Autoplay every 7 seconds
-            >
+            <Slider {...settings}>
                 {media.map((file, index) => (
-                    <SwiperSlide key={index} className="relative">
+                    <div key={index} className="relative">
                         {file.filename.endsWith('.mp4') ? (
                             <video src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" autoPlay loop muted />
                         ) : (
                             <img src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" />
                         )}
                         <button onClick={() => removeFile(index)} className="absolute top-0 right-0 bg-red-500 text-white p-1">Remove</button>
-                    </SwiperSlide>
+                    </div>
                 ))}
-            </Swiper>
-
+            </Slider>
         </div>
     );
 

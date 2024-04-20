@@ -15,19 +15,18 @@ const AgentCard = ({ agent }) => {
     };
 
     return (
-        <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4">
+        <div className="p-4">
             <div className="h-80 flex flex-col items-center justify-center bg-white shadow-lg rounded-lg relative">
                 {officePhotos && officePhotos.length > 0 && (
                     <>
-                        <img className="absolute w-full h-full object-cover rounded-lg" src={officePhotos[currentPhotoIndex]} alt="Office" />
-                        <FaChevronLeft size={30} className="absolute left-2 top-1/2 text-black" onClick={handlePreviousClick} />
-                        <FaChevronRight size={30} className="absolute right-2 top-1/2 text-black" onClick={handleNextClick} />
-
+                        <img className="absolute top-0 w-full h-32 object-cover rounded-t-lg z-0" src={officePhotos[currentPhotoIndex]} alt="Office" />
+                        <FaChevronLeft size={30} className="absolute left-2 top-14 text-black z-10" onClick={handlePreviousClick} />
+                        <FaChevronRight size={30} className="absolute right-2 top-14 text-black z-10" onClick={handleNextClick} />
                     </>
                 )}
-                <Avatar src={photo} size="lg" />
-                <h2 className="mt-4 text-xl my-8 font-semibold text-blue-500">{agentName}</h2>
-                <div className="flex flex-col items-start w-full px-4">
+                <Avatar src={photo} size="lg" className="z-20 shadow-lg" />
+                <h2 className="mt-4 text-xl my-8 font-semibold text-blue-500 z-20">{agentName}</h2>
+                <div className="flex flex-col items-start w-full px-4 z-20">
                     <div className="flex gap-2 w-full">
                         <h3 className="text-md font-medium text-blue-500">Office Address:</h3>
                         <p className="text-gray-700">{officeAddress}</p>

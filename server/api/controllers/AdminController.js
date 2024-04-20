@@ -150,6 +150,20 @@ export const removeAgent = async (req, res) => {
     }
 };
 
+export const updateAgentStatus = async (req, res) => {
+    try {
+        const updatedAgent = await Agent.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+        if (!updatedAgent) {
+            return res.status(404).json({ message: 'Agent not found' });
+        }
+        res.json(updatedAgent);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+
 export const createContact = async (req, res) => {
     try {
         const newContact = new Contact(req.body);

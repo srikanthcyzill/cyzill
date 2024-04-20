@@ -139,6 +139,14 @@ export const api = createApi({
             }),
             invalidatesTags: ['Agents'],
         }),
+        updateAgentStatus: build.mutation({
+            query: ({ id, status }) => ({
+                url: `api/admin/agent/${id}/status`,
+                method: 'PATCH',
+                body: { status },
+            }),
+            invalidatesTags: ['Agents'],
+        }),
         getContent: build.query({
             query: () => 'api/admin/content',
         }),
@@ -250,6 +258,7 @@ export const {
     useAddAgentMutation,
     useGetAgentsQuery,
     useRemoveAgentMutation,
+    useUpdateAgentStatusMutation,
     useGetLeadsQuery,
     useDeleteLeadMutation,
     useUpdateLeadStatusMutation,

@@ -7,6 +7,9 @@ const agentSchema = new mongoose.Schema({
     officeAddress: { type: String, required: true },
     pincode: { type: String, required: true },
     serviceArea: { type: String, required: true },
+    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+    photo: { type: [String], default: [] },
+    officePhotos: { type: [String], default: [] }
 });
 
 export default mongoose.model('Agent', agentSchema);

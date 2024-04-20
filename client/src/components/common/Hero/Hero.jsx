@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Hero.css';
 import RentProperties from './RentProperties/RentProperties';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { BASE_URL } from '../../../config';
 
 const Hero = () => {
@@ -26,28 +24,30 @@ const Hero = () => {
         return <div>Loading...</div>;
     }
 
+    var settings = {
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 10000,
+        pauseOnHover: true
+    };
+
     return (
         <>
             <div className="hero-container">
-                <Swiper
-                    spaceBetween={50}
-                    slidesPerView={1}
-                    navigation
-                    pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                    onSwiper={(swiper) => console.log(swiper)}
-                    onSlideChange={() => console.log('slide change')}
-                >
+                <Slider {...settings}>
                     {media.map((file, index) => (
-                        <SwiperSlide key={index}>
+                        <div key={index}>
                             {file.filename.endsWith('.mp4') ? (
                                 <video src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" autoPlay loop muted />
                             ) : (
                                 <img src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" />
                             )}
-                        </SwiperSlide>
+                        </div>
                     ))}
-                </Swiper>
+                </Slider>
                 <RentProperties />
             </div>
         </>

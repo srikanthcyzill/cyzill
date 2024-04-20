@@ -70,7 +70,7 @@ const UserRoutes = () => {
                 <Route path='users' element={<AdminPrivateRoute><AllUsers /></AdminPrivateRoute>} />
                 <Route path='properties' element={<AdminPrivateRoute><Properties /></AdminPrivateRoute>} />
                 <Route path='plans' element={<AdminPrivateRoute><Plans /></AdminPrivateRoute>} />
-                <Route path='plans' element={<AdminPrivateRoute><Plans /></AdminPrivateRoute>} />
+                <Route path='agents' element={<AdminPrivateRoute><AddAgents /></AdminPrivateRoute>} />
                 <Route path='admins' element={<AdminPrivateRoute><Admins /></AdminPrivateRoute>} />
                 <Route path='uploads' element={<AdminPrivateRoute><AdsSection /></AdminPrivateRoute>} />
                 <Route path='privacy' element={<AdminPrivateRoute><PrivacyPolicyPage /></AdminPrivateRoute>} />
