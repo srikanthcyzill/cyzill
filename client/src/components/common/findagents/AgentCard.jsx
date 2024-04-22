@@ -16,17 +16,19 @@ const AgentCard = ({ agent }) => {
 
     return (
         <div className="p-4">
-            <div className="h-80 flex flex-col items-center justify-center bg-white shadow-lg rounded-lg relative">
+            <div className="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg relative min-h-[17rem]">
                 {officePhotos && officePhotos.length > 0 && (
                     <>
-                        <img className="absolute top-0 w-full h-32 object-cover rounded-t-lg z-0" src={officePhotos[currentPhotoIndex]} alt="Office" />
-                        <FaChevronLeft size={30} className="absolute left-2 top-14 text-black z-10" onClick={handlePreviousClick} />
-                        <FaChevronRight size={30} className="absolute right-2 top-14 text-black z-10" onClick={handleNextClick} />
+                        <img className="absolute top-0 w-full h-1/2 object-cover rounded-t-lg z-0" src={officePhotos[currentPhotoIndex]} alt="Office" />
+                        <FaChevronLeft className="absolute left-2 top-1/4 text-black z-10" onClick={handlePreviousClick} />
+                        <FaChevronRight className="absolute right-2 top-1/4 text-black z-10" onClick={handleNextClick} />
                     </>
                 )}
                 <Avatar src={photo} size="lg" className="z-20 shadow-lg" />
-                <h2 className="mt-4 text-xl my-8 font-semibold text-blue-500 z-20">{agentName}</h2>
-                <div className="flex flex-col items-start w-full px-4 z-20">
+                <div className="mt-4 bg-black bg-opacity-50 rounded px-2 py-1 z-20">
+                    <h2 className="text-xl font-semibold text-white">{agentName}</h2>
+                </div>
+                <div className="flex flex-col items-start w-full p-4 z-20">
                     <div className="flex gap-2 w-full">
                         <h3 className="text-md font-medium text-blue-500">Office Address:</h3>
                         <p className="text-gray-700">{officeAddress}</p>

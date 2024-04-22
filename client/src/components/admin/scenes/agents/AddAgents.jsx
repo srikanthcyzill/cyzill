@@ -66,14 +66,6 @@ const AddAgents = () => {
             ),
         },
     ];
-
-    const handleAgentPhotoChange = (e) => {
-        setAgentPhoto(URL.createObjectURL(e.target.files[0]));
-    };
-
-    const handleOfficePhotosChange = (e) => {
-        setOfficePhotos(Array.from(e.target.files).map(file => URL.createObjectURL(file)));
-    };
     const handleSave = async () => {
         setIsSaving(true);
         try {
@@ -196,33 +188,32 @@ const AddAgents = () => {
                         </Paper>
                     </div>
                 </div>
-                <div className="w-1/2">
-                    <div {...getAgentPhotoRootProps()} className="">
+                <div className="w-1/2 mx-auto">
+                    <div {...getAgentPhotoRootProps()} className="p-4 border-2 border-dashed border-gray-400 rounded-md">
                         <input {...getAgentPhotoInputProps()} />
-                        {isAgentPhotoDragActive ? <p className=''>Drop the agent photo here ...</p> : <div><p className='text-md text-gray-500'>Upload Agent Photo</p></div>}
+                        {isAgentPhotoDragActive ? <p className='text-center text-gray-500'>Drop the agent photo here ...</p> : <p className='text-center text-gray-500'>Upload Agent Photo</p>}
                     </div>
-                    <div className="image-container">
+                    <div className="image-container mt-4">
                         {agentPhoto && (
-                            <div className="mb-2 relative">
-                                <Avatar src={agentPhoto.url} alt="Agent Photo" className="w-full h-32 object-cover" />
-                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 " onClick={() => setAgentPhoto(null)} />
+                            <div className="relative">
+                                <Avatar src={agentPhoto.url} size={128} alt="Agent Photo" className="object-cover rounded-lg shadow-lg" />
+                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 rounded-full" onClick={() => setAgentPhoto(null)} />
                             </div>
                         )}
                     </div>
-                    <div {...getOfficePhotosRootProps()} className="">
+                    <div {...getOfficePhotosRootProps()} className="p-4 border-2 border-dashed border-gray-400 rounded-md mt-4">
                         <input {...getOfficePhotosInputProps()} />
-                        {isOfficePhotosDragActive ? <p className=''>Drop the office photos here ...</p> : <div><p className='text-md text-gray-500'>Upload Office Photos Here</p></div>}
+                        {isOfficePhotosDragActive ? <p className='text-center text-gray-500'>Drop the office photos here ...</p> : <p className='text-center text-gray-500'>Upload Office Photos Here</p>}
                     </div>
-                    <div className="image-container">
+                    <div className="image-container mt-4 grid grid-cols-3 gap-4">
                         {officePhotos.map((photo, index) => (
-                            <div key={index} className="mb-2 relative">
-                                <img src={photo.url} alt={`Office Photo ${index}`} className="w-full h-32 object-cover" />
-                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 " onClick={() => removeFile(index, 'officePhotos')} />
+                            <div key={index} className="relative">
+                                <img src={photo.url} alt={`Office Photo ${index}`} className="w-full h-32 object-cover rounded-lg shadow-lg" />
+                                <MdDeleteForever className="absolute top-0 right-0 m-1 cursor-pointer text-white bg-red-600 rounded-full" onClick={() => removeFile(index, 'officePhotos')} />
                             </div>
                         ))}
                     </div>
                 </div>
-
             </div>
             <div className="w-full p-4">
                 <Typography variant="h5" className="text-center">

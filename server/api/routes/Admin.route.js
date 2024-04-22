@@ -13,7 +13,7 @@ router.delete('/content/:id', authenticateJWT, deleteContent);
 router.get('/content/:identifier', getContent);
 router.post('/login', login);
 router.post('/logout', logout);
-router.get('/plans', authenticateJWT, getPlans);
+router.get('/plans', getPlans);
 router.post('/plans', authenticateJWT, createPlan);
 router.put('/plans/:id', authenticateJWT, updatePlan);
 router.delete('/plans/:id', authenticateJWT, deletePlan);

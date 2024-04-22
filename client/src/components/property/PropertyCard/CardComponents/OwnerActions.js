@@ -22,6 +22,7 @@ const CustomSwitch = withStyles({
 
 const OwnerActions = ({ property, properties, setProperties }) => {
     const [open, setOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
     const handleDelete = async (propertyId, event) => {
         event.stopPropagation();
         console.log(properties, setProperties);
@@ -74,7 +75,7 @@ const OwnerActions = ({ property, properties, setProperties }) => {
                             style: { backgroundColor: 'rgba(255, 255, 255, 0.8)' },
                         }}
                     >
-                        <PhonePePaymentGateway open={open} handleToggleChange={handleToggleChange} />
+                        <PhonePePaymentGateway open={open} handleToggleChange={handleToggleChange} propertyId={property._id} plan={selectedPlan} />
                     </Modal>
                 </div>
             </>
