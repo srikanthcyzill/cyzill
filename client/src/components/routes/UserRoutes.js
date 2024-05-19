@@ -36,6 +36,7 @@ import PageSelection from '../admin/scenes/pages/PagesSelection';
 import Plans from '../admin/scenes/plans/Plans';
 import Admins from '../admin/scenes/admins/Admins';
 import AdsSection from '../admin/scenes/uploads/AdsSection';
+import AgentRequests from '../admin/scenes/agentrequests/AgentRequests';
 
 const UserRoutes = () => {
     const currentUser = useSelector(state => state.user.currentUser);
@@ -71,6 +72,7 @@ const UserRoutes = () => {
                 <Route path='properties' element={<AdminPrivateRoute><Properties /></AdminPrivateRoute>} />
                 <Route path='plans' element={<AdminPrivateRoute><Plans /></AdminPrivateRoute>} />
                 <Route path='agents' element={<AdminPrivateRoute><AddAgents /></AdminPrivateRoute>} />
+                <Route path='agent-requests' element={<AdminPrivateRoute><AgentRequests /></AdminPrivateRoute>} />
                 <Route path='admins' element={<AdminPrivateRoute><Admins /></AdminPrivateRoute>} />
                 <Route path='uploads' element={<AdminPrivateRoute><AdsSection /></AdminPrivateRoute>} />
                 <Route path='privacy' element={<AdminPrivateRoute><PrivacyPolicyPage /></AdminPrivateRoute>} />

@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../../../config';
-import { Input } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import { SearchIcon } from '@nextui-org/shared-icons';
 import AgentCard from './AgentCard';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
 const FindAgents = () => {
     const [agents, setAgents] = useState([]);
     const [search, setSearch] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [agentRequest, setAgentRequest] = useState({
+        name: '',
+        email: '',
+        phoneNumber: ''
+    });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,10 +39,42 @@ const FindAgents = () => {
         }
     }, [agents]);
 
+    const handleInputChange = (e) => {
+        setAgentRequest({
+            ...agentRequest,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleAgentRequest = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BASE_URL}/api/admin/agent-request`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(agentRequest)
+            });
+            if (!response.ok) {
+                throw new Error('Request failed');
+            }
+            alert('Request sent successfully');
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error sending request:', error);
+        }
+    };
+
     return (
-        <div className='mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8' >
+        <div className='mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8'>
             <h1 className="text-2xl font-bold mb-4 text-center">These are the Agents Currently Available</h1>
-            <div className="flex justify-end p-2">
+            <div className="flex justify-between p-2">
+                <Button color="primary" auto size="small" className="ml-2" onClick={() => setIsModalOpen(true)}>
+                    Become an Agent?
+                </Button>
                 <Input
                     classNames={{
                         base: 'max-w-full sm:max-w-[15rem] h-10',
@@ -61,6 +104,19 @@ const FindAgents = () => {
                         </div>
                     ))}
             </div>
+            <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <DialogTitle>Become an Agent</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleAgentRequest}>
+                        <TextField name="name" label="Name" required value={agentRequest.name} onChange={handleInputChange} />
+                        <TextField name="email" label="Email" required value={agentRequest.email} onChange={handleInputChange} />
+                        <TextField name="phoneNumber" label="Phone Number" required value={agentRequest.phoneNumber} onChange={handleInputChange} />
+                        <DialogActions>
+                            <Button type="submit">Submit Request</Button>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

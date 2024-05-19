@@ -2,9 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../../../firebase.js';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import { useAddFileMutation, useDeleteFileMutation, useGetFilesQuery } from '../../state/api';
 
 const AdsSection = () => {
@@ -102,20 +99,11 @@ const AdsSection = () => {
         });
     };
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps } = useDropzone({ onDrop });
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    var settings = {
-        dots: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 7000,
-        pauseOnHover: true
-    };
 
     return (
         <div className="p-6">
@@ -124,21 +112,20 @@ const AdsSection = () => {
                 <input {...getInputProps()} accept="image/*,video/*" />
                 <p className="text-md text-gray-500">PNG, JPG, JPEG, MP4, WebM up to 20MB</p>
             </div>
-            <Slider {...settings}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
                 {media.map((file, index) => (
                     <div key={index} className="relative">
                         {file.filename.endsWith('.mp4') ? (
-                            <video src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" autoPlay loop muted />
+                            <video src={file.firebaseUrl} alt="" className="w-full h-48 object-cover" autoPlay loop muted />
                         ) : (
-                            <img src={file.firebaseUrl} alt="" className="w-full h-96 object-cover" />
+                            <img src={file.firebaseUrl} alt="" className="w-full h-48 object-cover" />
                         )}
                         <button onClick={() => removeFile(index)} className="absolute top-0 right-0 bg-red-500 text-white p-1">Remove</button>
                     </div>
                 ))}
-            </Slider>
+            </div>
         </div>
     );
-
 };
 
 export default AdsSection;

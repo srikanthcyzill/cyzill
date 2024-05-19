@@ -32,6 +32,10 @@ const Header = () => {
         setActiveDropdown(null);
     };
 
+    const agentMenuItems = currentUser && currentUser.userType === 'agent' ? [
+        { name: "Leads", link: "/leads" },
+    ] : [];
+
     const menuItems = [
         { name: "Profile", link: "/profile" },
         { name: "Buy", link: "/homes" },
@@ -39,8 +43,10 @@ const Header = () => {
         { name: "Add New Listings", link: "/property-listing" },
         { name: "My Properties", link: "/listed-properties" },
         { name: "Saved", link: "/saved" },
+        ...agentMenuItems,
         currentUser ? "Log Out" : { name: "Login", link: "/login" },
     ];
+
 
 
     console.log('Current User:', currentUser);

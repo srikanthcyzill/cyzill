@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages, getAllTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction, getFiles, getFile, addFile, updateFile, deleteFile, updateAgentStatus } from '../controllers/AdminController.js';
+import { getAdminPage, updateContent, deleteContent, createContent, login, logout, getContent, createAgent, getAgents, removeAgent, createContact, getContacts, deleteContact, updateContact, getPage, createPage, updatePage, deletePage, getPages, getAllTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction, getFiles, getFile, addFile, updateFile, deleteFile, updateAgentStatus, createAgentRequest, getAgentRequests, deleteAgentRequest, updateAgentRequest } from '../controllers/AdminController.js';
 import { authenticateJWT } from '../middleware/authenticate.js';
 import { createPlan, deletePlan, getPlans, updatePlan } from '../controllers/PlanController.js';
 import { getAdmins, createAdmin, updateAdmin, deleteAdmin } from '../controllers/AdminController.js';
@@ -44,5 +44,10 @@ router.get('/files/:id', getFile);
 router.post('/files', authenticateJWT, addFile);
 router.put('/files/:id', authenticateJWT, updateFile);
 router.delete('/files/:id', authenticateJWT, deleteFile);
+router.post('/agent-request', authenticateJWT, createAgentRequest);
+router.get('/agent-request', authenticateJWT, getAgentRequests);
+router.delete('/agent-request/:id', authenticateJWT, deleteAgentRequest);
+router.put('/agent-request/:id', authenticateJWT, updateAgentRequest);
+
 
 export default router;

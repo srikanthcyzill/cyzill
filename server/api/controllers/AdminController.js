@@ -7,7 +7,7 @@ import Agent from '../models/AgentModel.js';
 import Contact from '../models/ContactModel.js';
 import Page from '../models/PageModel.js';
 import File from '../models/FileModel.js';
-
+import AgentRequest from '../models/AgentRequestModel.js';
 
 export const getAdminPage = async (req, res) => {
     try {
@@ -267,9 +267,9 @@ export const deleteTransaction = async (req, res) => {
 };
 
 export const login = async (req, res, next) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const admin = await Admin.findOne({ username });
+        const admin = await Admin.findOne({ email });
         if (!admin) {
             return next(errorHandler(404, 'Admin not found'));
         }
@@ -277,7 +277,7 @@ export const login = async (req, res, next) => {
         if (!isMatch) {
             return next(errorHandler(401, 'Wrong Credentials'));
         }
-        const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ _id: admin._id, roles: admin.roles }, process.env.JWT_SECRET);
         const { password: pwd, ...rest } = admin._doc;
         res.status(200).json({ token, ...rest });
     } catch (error) {
@@ -285,7 +285,7 @@ export const login = async (req, res, next) => {
     }
 };
 
-
+// Logout
 export const logout = (req, res) => {
     try {
         res.clearCookie('token');
@@ -305,16 +305,17 @@ export const getAdmins = async (req, res) => {
     }
 };
 
-// Create a new admin
+// Create an admin
 export const createAdmin = async (req, res) => {
     try {
-        const newAdmin = new Admin(req.body);
+        const newAdmin = new Admin({ ...req.body, roles: [req.body.role] }); // Save the role as an array
         const savedAdmin = await newAdmin.save();
         res.json(savedAdmin);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
+
 
 // Update an existing admin
 export const updateAdmin = async (req, res) => {
@@ -407,3 +408,45 @@ export const getFile = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+export const createAgentRequest = async (req, res) => {
+    try {
+        const newAgentRequest = new AgentRequest({ ...req.body, user: req.user.id });
+        const savedAgentRequest = await newAgentRequest.save();
+        res.json(savedAgentRequest);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getAgentRequests = async (req, res) => {
+    try {
+        const agentRequests = await AgentRequest.find().populate('user');
+        res.json(agentRequests);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const deleteAgentRequest = async (req, res) => {
+    try {
+        const deletedAgentRequest = await AgentRequest.findByIdAndDelete(req.params.id);
+        if (!deletedAgentRequest) {
+            return res.status(404).json({ message: 'Agent request not found' });
+        }
+        res.json(deletedAgentRequest);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+export const updateAgentRequest = async (req, res) => {
+    try {
+        const updatedAgentRequest = await AgentRequest.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedAgentRequest) {
+            return res.status(404).json({ message: 'Agent request not found' });
+        }
+        res.json(updatedAgentRequest);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+

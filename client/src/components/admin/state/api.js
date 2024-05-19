@@ -27,6 +27,14 @@ export const api = createApi({
         "Files",
     ],
     endpoints: (build) => ({
+        updateUser: build.mutation({
+            query: ({ id, updatedUser }) => ({
+                url: `api/user/${id}`,
+                method: 'PUT',
+                body: updatedUser,
+            }),
+            invalidatesTags: ['User'],
+        }),
         getPlans: build.query({
             query: () => 'api/admin/plans',
             providesTags: ['Plans'],
@@ -199,7 +207,6 @@ export const api = createApi({
             }),
             invalidatesTags: ['Admins'],
         }),
-
         getUserPerformance: build.query({
             query: (id) => `management/performance/${id}`,
             providesTags: ["Performance"],
@@ -239,42 +246,50 @@ export const api = createApi({
             }),
             invalidatesTags: ['Files'],
         }),
+        createAgentRequest: build.mutation({
+            query: (request) => ({
+                url: 'api/admin/agent-request',
+                method: 'POST',
+                body: request,
+            }),
+            invalidatesTags: ['AgentRequests'],
+        }),
+        getAgentRequests: build.query({
+            query: () => 'api/admin/agent-request',
+            providesTags: ['AgentRequests'],
+        }),
+        deleteAgentRequest: build.mutation({
+            query: (id) => ({
+                url: `api/admin/agent-request/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['AgentRequests'],
+        }),
+        updateAgentRequest: build.mutation({
+            query: ({ id, updatedRequest }) => ({
+                url: `api/admin/agent-request/${id}`,
+                method: 'PUT',
+                body: updatedRequest,
+            }),
+            invalidatesTags: ['AgentRequests'],
+        }),
+
     }),
 });
 
 export const {
-    useGetUserQuery,
-    useGetPropertiesQuery,
-    useGetCustomersQuery,
-    useGetTransactionsQuery,
-    useGetGeographyQuery,
-    useGetSalesQuery,
-    useGetAdminsQuery,
-    useCreateAdminMutation,
-    useUpdateAdminMutation,
-    useDeleteAdminMutation,
-    useGetUserPerformanceQuery,
-    useGetDashboardQuery,
-    useAddAgentMutation,
-    useGetAgentsQuery,
-    useRemoveAgentMutation,
-    useUpdateAgentStatusMutation,
-    useGetLeadsQuery,
-    useDeleteLeadMutation,
-    useUpdateLeadStatusMutation,
-    useGetPageQuery,
-    useCreatePageMutation,
-    useUpdatePageMutation,
-    useDeletePageMutation,
-    useGetPagesQuery,
-    useGetPlansQuery,
-    useCreatePlanMutation,
-    useUpdatePlanMutation,
-    useDeletePlanMutation,
-    useGetFilesQuery,
-    useGetFileQuery,
-    useAddFileMutation,
-    useUpdateFileMutation,
-    useDeleteFileMutation,
+    useUpdateUserMutation,
+    useGetUserQuery, useGetPropertiesQuery, useGetCustomersQuery,
+    useGetTransactionsQuery, useGetGeographyQuery, useGetSalesQuery,
+    useGetAdminsQuery, useCreateAdminMutation, useUpdateAdminMutation,
+    useDeleteAdminMutation, useGetUserPerformanceQuery, useGetDashboardQuery,
+    useAddAgentMutation, useGetAgentsQuery, useRemoveAgentMutation,
+    useUpdateAgentStatusMutation, useGetLeadsQuery, useDeleteLeadMutation,
+    useUpdateLeadStatusMutation, useGetPageQuery, useCreatePageMutation,
+    useUpdatePageMutation, useDeletePageMutation, useGetPagesQuery,
+    useGetPlansQuery, useCreatePlanMutation, useUpdatePlanMutation,
+    useDeletePlanMutation, useGetFilesQuery, useGetFileQuery,
+    useAddFileMutation, useUpdateFileMutation, useDeleteFileMutation,
+    useCreateAgentRequestMutation, useGetAgentRequestsQuery, useDeleteAgentRequestMutation,
+    useUpdateAgentRequestMutation,
 } = api;
-

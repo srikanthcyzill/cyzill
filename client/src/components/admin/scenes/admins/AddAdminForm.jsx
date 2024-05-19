@@ -1,7 +1,10 @@
 import React from 'react';
-import { FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, Button } from '@mui/material';
+import { FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, Button, Checkbox, ListItemText } from '@mui/material';
 
 const AddAdminForm = ({ adminData, handleChange, handleCreateAdmin }) => {
+    const pages = ['Customers', 'Leads', 'AllUsers', 'Properties', 'Plans', 'AddAgents', 'Admins', 'AdsSection', 'PrivacyPolicyPage', 'PageSelection', 'DynamicPage'];
+    const roles = ['admin', 'accounts', 'manager'];
+
     return (
         <Grid item xs={6}>
             <Paper elevation={3} sx={{ padding: 2 }}>
@@ -21,10 +24,9 @@ const AddAdminForm = ({ adminData, handleChange, handleCreateAdmin }) => {
                                     onChange={handleChange}
                                     label="Role"
                                 >
-                                    <MenuItem value={"admin"}>Admin</MenuItem>
-                                    <MenuItem value={"worker"}>Worker</MenuItem>
-                                    <MenuItem value={"manager"}>Manager</MenuItem>
-                                    {/* Add more roles as needed */}
+                                    {roles.map((role) => (
+                                        <MenuItem key={role} value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -59,6 +61,28 @@ const AddAdminForm = ({ adminData, handleChange, handleCreateAdmin }) => {
                                 value={adminData.password}
                                 onChange={handleChange}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="pages-label">Pages</InputLabel>
+                                <Select
+                                    labelId="pages-label"
+                                    id="pages"
+                                    name="pages"
+                                    multiple
+                                    value={adminData.pages}
+                                    onChange={handleChange}
+                                    label="Pages"
+                                    renderValue={(selected) => selected.join(', ')}
+                                >
+                                    {pages.map((page) => (
+                                        <MenuItem key={page} value={page}>
+                                            <Checkbox checked={adminData.pages.indexOf(page) > -1} />
+                                            <ListItemText primary={page} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <Button onClick={handleCreateAdmin} variant="contained" color="primary" fullWidth>

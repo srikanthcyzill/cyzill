@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const adminSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        unique: true,
-    },
     name: {
         type: String,
         required: true,
@@ -19,11 +15,10 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    role: {
-        type: String,
-        required: true,
-    }
+    roles: [String],
+    pages: [String],
 }, { timestamps: true });
+
 
 adminSchema.pre('save', async function (next) {
     if (this.isModified('password')) {

@@ -33,6 +33,8 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
+        enum: ['user', 'agent'],
+        default: 'user'
     },
     savedProperties: [{
         type: mongoose.Schema.Types.ObjectId,

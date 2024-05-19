@@ -23,7 +23,7 @@ const Leads = () => {
         try {
             const newStatus = currentStatus === 'solved' ? 'unsolved' : 'solved';
             await updateLeadStatus({ id, status: newStatus });
-            refetch(); // refetch the leads after updating the status of a lead
+            refetch();
         } catch (err) {
             console.error('Error updating lead status:', err);
         }

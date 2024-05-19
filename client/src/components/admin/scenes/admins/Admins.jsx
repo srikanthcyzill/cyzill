@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Grid } from '@mui/material';
 import AddAdminForm from './AddAdminForm';
-import UpdateAdminForm from './UpdateAdminForm';
 import AdminDataGrid from './AdminDataGrid';
-import { useGetAdminsQuery, useCreateAdminMutation, useUpdateAdminMutation, useDeleteAdminMutation } from '../../state/api';
+import { useGetAdminsQuery, useCreateAdminMutation, useDeleteAdminMutation } from '../../state/api';
 
 const Admins = () => {
     const { data: admins = [], isLoading, isError } = useGetAdminsQuery();
@@ -12,45 +10,41 @@ const Admins = () => {
         role: '',
         name: '',
         email: '',
-        password: ''
+        password: '',
+        pages: [],
     });
-    const [selectedAdmin, setSelectedAdmin] = useState(null);
-    const createAdminMutation = useCreateAdminMutation();
-    const updateAdminMutation = useUpdateAdminMutation();
-    const deleteAdminMutation = useDeleteAdminMutation();
-
+    const [, setSelectedAdmin] = useState(null);
+    const [deleteAdminMutation] = useDeleteAdminMutation();
     useEffect(() => {
-        // Fetch initial data if needed
     }, []);
 
     const handleChange = (e) => {
         setAdminData({ ...adminData, [e.target.name]: e.target.value });
     };
 
-    const handleCreateAdmin = () => {
-        console.log("Creating admin...");
-        console.log("createAdminMutation.mutate:", createAdminMutation.mutate);
-        if (createAdminMutation.mutate) {
-            createAdminMutation.mutate(adminData);
-            setAdminData({
-                role: '',
-                name: '',
-                email: '',
-                password: ''
-            });
+    const [createAdmin] = useCreateAdminMutation();
+
+    const handleCreateAdmin = async () => {
+        try {
+            await createAdmin(adminData);
+            alert('Admin created successfully');
+        } catch (error) {
+            alert(`Error creating admin: ${error.message}`);
         }
     };
 
-    const handleUpdateAdmin = () => {
-        console.log("Updating admin...");
-        if (selectedAdmin) {
-            updateAdminMutation.mutate({ id: selectedAdmin.id, updatedAdmin: adminData });
-        }
-    };
 
     const handleDeleteAdmin = (id) => {
-        deleteAdminMutation.mutate(id);
+        console.log("Deleting admin with id:", id);
+        console.log("deleteAdminMutation:", deleteAdminMutation);
+        try {
+            deleteAdminMutation(id);
+        } catch (error) {
+            console.error("Error deleting admin:", error);
+        }
     };
+
+
 
     const handleAdminSelect = (admin) => {
         setSelectedAdmin(admin);
@@ -67,15 +61,7 @@ const Admins = () => {
                 handleChange={handleChange}
                 handleCreateAdmin={handleCreateAdmin}
             />
-            <UpdateAdminForm
-                selectedAdmin={selectedAdmin} // Pass the selectedAdmin state
-                admins={admins} // Pass the admins data
-                handleChange={handleChange}
-                handleUpdateAdmin={handleUpdateAdmin}
-            />
-
-
-            <AdminDataGrid admins={admins} />
+            <AdminDataGrid admins={admins} handleDeleteAdmin={handleDeleteAdmin} />
         </Grid>
     );
 };

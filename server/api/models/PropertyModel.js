@@ -97,7 +97,8 @@ const propertySchema = new mongoose.Schema({
     },
     propertyStatus: {
         paymentDate: { type: Date },
-        plan: { type: String, enum: ['none', 'bronze', 'silver', 'gold', 'platinum'], default: 'none' }
+        plan: { type: String, enum: ['none', 'bronze', 'silver', 'gold', 'platinum'], default: 'none' },
+        active: { type: Boolean, default: false }
     },
     likes: [
         {
@@ -108,17 +109,21 @@ const propertySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 propertySchema.methods.checkPlanExpiration = function () {
-    const planDuration = plans.find(plan => plan.name === this.licenseCardStatus.plan).days;
-    const expirationDate = new Date(this.licenseCardStatus.paymentDate.getTime() + planDuration * 24 * 60 * 60 * 1000);
-
+    const planDuration = plans.find(plan => plan.name === this.propertyStatus.plan).days;
+    const expirationDate = new Date(this.propertyStatus.paymentDate.getTime() + planDuration * 24 * 60 * 60 * 1000);
     if (new Date() > expirationDate) {
-        this.licenseCardStatus.plan = 'none';
+        this.propertyStatus.plan = 'none';
+        this.propertyStatus.active = false;
     }
+};
+
+propertySchema.methods.sellProperty = function () {
+    this.soldStatus = true;
+    this.propertyStatus.active = false;
 };
 
 const Property = mongoose.model('Property', propertySchema);
 
 export default Property;
-
 
 propertySchema.index({ '$**': 'text' });

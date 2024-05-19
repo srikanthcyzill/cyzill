@@ -47,19 +47,11 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         gap="3rem"
                         p="0.1rem 1.5rem"
                     >
-                        <InputBase placeholder="Search..." />
-                        <IconButton>
-                            <MdSearch />
-                        </IconButton>
                     </FlexBetween>
                 </FlexBetween>
 
                 {/* RIGHT SIDE */}
                 <FlexBetween gap="1.5rem">
-                    <IconButton>
-                        <MdOutlineSettings sx={{ fontSize: "25px" }} />
-                    </IconButton>
-
                     <FlexBetween>
                         <Button
                             onClick={handleClick}

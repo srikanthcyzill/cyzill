@@ -11,7 +11,7 @@ import {
     Typography,
     useTheme,
 } from "@mui/material";
-import { MdOutlineHouse, MdOutlineChevronLeft, MdChevronRight, MdHome, MdGroups, MdReceipt, MdPointOfSale, MdOutlineToday, MdCalendarMonth, MdAdminPanelSettings, MdOutlineTrendingUp, MdPieChart, MdOutlineRealEstateAgent, MdEmail, MdOutlinePriceChange, MdCloudUpload } from "react-icons/md";
+import { MdOutlineHouse, MdOutlineChevronLeft, MdChevronRight, MdHome, MdGroups, MdReceipt, MdAdminPanelSettings, MdOutlineTrendingUp, MdOutlineRealEstateAgent, MdEmail, MdOutlinePriceChange, MdCloudUpload, MdSupportAgent } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
@@ -23,15 +23,11 @@ const navItems = [
     { text: "Customers", path: "customers", icon: <MdGroups /> },
     { text: "Transactions", path: "transactions", icon: <MdReceipt /> },
     { text: "Agents", path: "agents", icon: <MdOutlineRealEstateAgent /> },
+    { text: "Agent Requests", path: "agent-requests", icon: <MdSupportAgent /> },
     { text: "Leads", path: "leads", icon: <MdEmail /> },
     { text: "Plans", path: "plans", icon: <MdOutlinePriceChange /> },
-    { text: "Sales", path: "sales", icon: null },
-    { text: "Overview", path: "overview", icon: <MdPointOfSale /> },
-    { text: "Daily", path: "daily", icon: <MdOutlineToday /> },
-    { text: "Monthly", path: "monthly", icon: <MdCalendarMonth /> },
-    { text: "Breakdown", path: "breakdown", icon: <MdPieChart /> },
     { text: "Management", path: "management", icon: null },
-    { text: "Admins", path: "admins", icon: <MdAdminPanelSettings /> },
+    { text: "Staff Members", path: "admins", icon: <MdAdminPanelSettings /> },
     { text: "Performance", path: "performance", icon: <MdOutlineTrendingUp /> },
     { text: "Uploads", path: "uploads", icon: <MdCloudUpload /> },
     { text: "Editor", path: "editor", icon: null },
