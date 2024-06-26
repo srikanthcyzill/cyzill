@@ -20,17 +20,16 @@ const ImageGallery = ({ images, activeImage, setActiveImage, setShowGallery }) =
     return (
         <div className="fixed top-0 left-0 z-50 w-full h-full flex justify-center items-center bg-black">
             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                <div className=" rounded-lg h-full w-full max-w-screen-lg flex flex-col relative">
+                <div className="rounded-lg h-full w-full max-w-screen-lg flex flex-col relative">
                     <div className="absolute top-0 right-0 p-2">
                         <AiOutlineClose className="cursor-pointer text-4xl text-white hover:bg-red-600" onClick={handleCloseGallery} />
                     </div>
                     <div className="flex justify-center items-center flex-1 overflow-hidden">
                         <img
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             src={images[activeImage]}
                             alt={`Property ${activeImage + 1}`}
                         />
-
                     </div>
                     <div className="flex justify-between items-center absolute bottom-1/2 w-full">
                         <button onClick={handlePrevImage} className="text-white"><AiOutlineLeft className="text-3xl" /></button>

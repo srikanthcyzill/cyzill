@@ -67,11 +67,16 @@ const PropertyListing = () => {
     const setStep = (newStep) => dispatch({ type: 'setStep', newStep });
     const { step, formData } = state;
     const nextStep = () => {
-        const nextStepNumber = step + 1;
-        if (nextStepNumber <= Object.keys(steps).length) {
-            dispatch({ type: 'nextStep' });
+        if (isStepCompleted()) {
+            const nextStepNumber = step + 1;
+            if (nextStepNumber <= Object.keys(steps).length) {
+                dispatch({ type: 'nextStep' });
+            }
+        } else {
+            console.error('Please complete the current step before moving to the next step.');
         }
     };
+
     const previousStep = () => dispatch({ type: 'previousStep' });
 
     const saveFormData = (data) => {
@@ -95,16 +100,12 @@ const PropertyListing = () => {
             case 1:
                 return (
                     state.formData.description.trim() !== '' &&
-                    state.formData.media.length > 0 &&
-                    state.formData.location.lat !== '' &&
-                    state.formData.location.lng !== '' &&
-                    state.formData.bedrooms &&
-                    state.formData.bathrooms &&
-                    state.formData.coveredArea &&
-                    state.formData.carpetArea &&
-                    state.formData.constructionYear &&
-                    state.formData.payment.length > 0
+                    state.formData.personalDetails.trim() !== '' &&
+                    state.formData.forDetails.trim() !== '' &&
+                    state.formData.propertyType.trim() !== '' &&
+                    (state.formData.propertyType !== 'flat' || state.formData.totalFlats.trim() !== '')
                 );
+
 
             case 2:
                 return state.formData.media && state.formData.media.length > 0;

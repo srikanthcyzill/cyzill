@@ -28,11 +28,7 @@ const navItems = [
     { text: "Plans", path: "plans", icon: <MdOutlinePriceChange /> },
     { text: "Management", path: "management", icon: null },
     { text: "Staff Members", path: "admins", icon: <MdAdminPanelSettings /> },
-    { text: "Performance", path: "performance", icon: <MdOutlineTrendingUp /> },
     { text: "Uploads", path: "uploads", icon: <MdCloudUpload /> },
-    { text: "Editor", path: "editor", icon: null },
-    { text: "Pages", path: "pages", icon: <MdOutlineTrendingUp /> },
-    { text: "Admin Pages", path: "adminpages", icon: <MdOutlineTrendingUp /> },
 ];
 
 const Sidebar = ({

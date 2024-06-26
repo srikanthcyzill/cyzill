@@ -28,6 +28,7 @@
 
 .property-image {
   height: 50%;
+  min-height: 180px;
   position: relative;
 }
 

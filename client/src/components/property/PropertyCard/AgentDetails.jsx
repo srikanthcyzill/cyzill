@@ -1,6 +1,5 @@
 import React from 'react';
-import { FaEye } from 'react-icons/fa';
-import { Button, Avatar } from "@nextui-org/react";
+import { Avatar } from "@nextui-org/react";
 
 const AgentDetails = ({ property }) => {
     return (
@@ -10,9 +9,7 @@ const AgentDetails = ({ property }) => {
             </div>
             <Avatar src={property.photo} size="lg" />
             <h2 className="mt-4 text-xl my-8 font-semibold">{property.username}</h2>
-            <Button color="primary" auto onClick={() => alert(property.phoneNumber || property.email)}>
-                <FaEye className="mr-2" /> View Contact
-            </Button>
+            <p className="text-center">{property.phoneNumber || property.email}</p>
         </div>
     );
 };

@@ -4,7 +4,7 @@ import { Chip } from "@nextui-org/react";
 
 const PropertyInfo = ({ property, currencyFormatter }) => {
     return (
-        <div className="property-info p-4">
+        <div className="property-info p-4 md:p-8 lg:p-12">
             <div className="listing-details">
                 <div className="price-details">
                     <h2 className="price text-2xl font-semibold">{currencyFormatter.format(property.price)}</h2>

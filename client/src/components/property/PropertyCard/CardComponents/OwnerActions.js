@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { BASE_URL } from '../../../../config';
-import { Switch, Modal, Button, Backdrop } from '@material-ui/core';
+import { Switch, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import PhonePePaymentGateway from '../../checkout/PhonePePaymentGateway';
 
 const CustomSwitch = withStyles({
     switchBase: {
@@ -22,11 +21,7 @@ const CustomSwitch = withStyles({
 
 const OwnerActions = ({ property, properties, setProperties }) => {
     const [open, setOpen] = useState(false);
-    const [selectedPlan, setSelectedPlan] = useState(null);
-
-    const handlePlanSelect = (plan) => {
-        setSelectedPlan(plan);
-    };
+    const navigate = useNavigate();
 
     const handleDelete = async (propertyId, event) => {
         event.stopPropagation();
@@ -54,8 +49,12 @@ const OwnerActions = ({ property, properties, setProperties }) => {
     };
     const handleToggleChange = (event) => {
         event.stopPropagation();
+        if (!open) {
+            navigate(`/checkout/${property._id}`, { state: { property } });
+        }
         setOpen(!open);
     };
+
 
     return (
         <div className="absolute bottom-2 right-2 flex items-center">
@@ -70,24 +69,6 @@ const OwnerActions = ({ property, properties, setProperties }) => {
                     <div onClick={(event) => event.stopPropagation()}>
                         <CustomSwitch checked={open} onChange={handleToggleChange} />
                     </div>
-                    <Modal
-                        open={open}
-                        onClose={handleToggleChange}
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            style: { backgroundColor: 'rgba(255, 255, 255, 0.8)' },
-                        }}
-                    >
-                        <PhonePePaymentGateway
-                            open={open}
-                            handleToggleChange={handleToggleChange}
-                            propertyId={property._id}
-                            plan={selectedPlan}
-                            handlePlanSelect={handlePlanSelect}
-                        />
-                    </Modal>
                 </div>
             </>
         </div>

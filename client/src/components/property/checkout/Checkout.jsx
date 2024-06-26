@@ -2,58 +2,31 @@
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import PropertyCard from "../PropertyCard/PropertyCard";
-import CardPayment from './CardPayment';
-import GooglePay from './GooglePay'; // Import your GooglePay component
-
-const stripePromise = loadStripe('YOUR_PUBLISHABLE_KEY');
+import PhonePePaymentGateway from "./PhonePePaymentGateway";
 
 function Checkout() {
     const location = useLocation();
-    const formData = location.state.formData;
-    const propertyId = location.state.propertyId;
-
-    const handlePaymentSuccess = (paymentMethodId) => {
-        // Send paymentMethodId to your server for further processing
-        console.log('Payment successful, payment method ID:', paymentMethodId);
-        // Proceed with checkout process
-    };
+    const property = location.state?.property;
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="w-full md:w-3/4 p-4 md:p-10 bg-gray-100">
-                <div className="container mx-auto">
-                    <h1 className="text-2xl font-semibold mb-4">Cart</h1>
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="md:w-3/4">
-                            <table className="w-full">
-                                <thead>
-                                    <tr>
-                                        <th className="text-left font-semibold">Property Card</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="py-4">
-                                            <div className="flex items-center">
-                                                {formData.property ? <PropertyCard property={formData.property} /> : <div>No property data</div>}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+        <div className="container mx-auto mt-10">
+            <div className="flex shadow-md my-10">
+                <div className="w-3/4 bg-white px-10 py-10">
+                    <div className="flex justify-between border-b pb-8">
+                        <h1 className="font-semibold text-2xl">Shopping Cart</h1>
+                    </div>
+                    <div className="flex items-center -mx-8 px-6 py-5">
+                        <div className="flex w-full md:w-1/3">
+                            {property ? <PropertyCard property={property} /> : <div>No property data</div>}
                         </div>
                     </div>
-                    <div className="md:w-1/4">
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-lg font-semibold mb-4">Payment</h2>
-                            <Elements stripe={stripePromise}>
-                                <CardPayment handlePaymentSuccess={handlePaymentSuccess} />
-                            </Elements>
-                            <GooglePay handlePaymentSuccess={handlePaymentSuccess} />
-                        </div>
+                </div>
+                <div id="summary" className="w-1/4 px-8 py-10">
+                    <h1 className="font-semibold text-2xl border-b pb-8">Order Summary</h1>
+                    <PhonePePaymentGateway />
+                    <div className="border-t mt-8">
+                        <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
                     </div>
                 </div>
             </div>
@@ -62,3 +35,5 @@ function Checkout() {
 }
 
 export default Checkout;
+
+

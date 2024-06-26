@@ -13,26 +13,17 @@ const Profile = () => {
     const [phoneNumber, setPhoneNumber] = useState(currentUser?.phoneNumber);
     const [photo, setPhoto] = useState(currentUser?.photo);
 
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
     useEffect(() => {
-        // Fetch user profile when the component mounts
-        // dispatch(fetchUserProfile());
     }, [dispatch]);
 
     const handleUpdateProfile = async () => {
         try {
-            // Get the token from localStorage
             const token = localStorage.getItem('token');
-
-            // Update the MongoDB database
             const response = await fetch(`${BASE_URL}/api/user/update/${currentUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Use the token from localStorage
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     username: username,
@@ -46,15 +37,6 @@ const Profile = () => {
             }
         } catch (error) {
             console.error('Error updating profile:', error.message);
-        }
-    };
-
-    const handleUpdatePassword = () => {
-        if (newPassword === confirmPassword) {
-            console.log('Updating password and profile...');
-            handleUpdateProfile();
-        } else {
-            console.log('New password and confirm password do not match.');
         }
     };
 
@@ -75,15 +57,6 @@ const Profile = () => {
                     {renderTextInput('Your phone number', phoneNumber, setPhoneNumber, 'tel', 'phoneNumber')}
                     <Button onClick={handleUpdateProfile} className="mt-4">Update Profile</Button>
                 </div>
-                <div className="w-full min-h-screen p-4">
-                    <h2 className="text-xl font-bold">Password Settings</h2>
-                    <div className="flex flex-col items-center w-full mt-8 space-y-2">
-                        {renderPasswordInput('Current Password', currentPassword, setCurrentPassword, 'currentPassword')}
-                        {renderPasswordInput('New Password', newPassword, setNewPassword, 'newPassword')}
-                        {renderPasswordInput('Confirm Password', confirmPassword, setConfirmPassword, 'confirmPassword')}
-                        <Button onClick={handleUpdatePassword} className="mt-4">Update Password</Button>
-                    </div>
-                </div>
             </main>
         </div>
     );
@@ -96,11 +69,5 @@ const renderTextInput = (label, value, onChange, type, id) => (
     </div>
 );
 
-const renderPasswordInput = (label, value, onChange, id) => (
-    <div className="w-full">
-        <label htmlFor={id} className="block mb-2 text-sm font-medium">{label}</label>
-        <Input type="password" id={id} className="w-full p-2 rounded-lg" placeholder={label} value={value} onChange={(e) => onChange(e.target.value)} required />
-    </div>
-);
 
 export default Profile;

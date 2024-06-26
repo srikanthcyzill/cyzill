@@ -1,12 +1,9 @@
-// ListedProperties.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlusCircle } from 'react-icons/fi';
 import { BASE_URL } from '../../../config';
 import useCurrencyFormatter from '../../../utils/useCurrencyFormatter';
 import PropertyCard from '../../property/PropertyCard/PropertyCard';
-import PropertyActions from './PropertyActions'; // Import the PropertyActions component
-import EditProperty from './EditProperty'; // Import the EditProperty component
 
 const ListedProperties = ({ username }) => {
     const [properties, setProperties] = useState([]);
@@ -22,22 +19,6 @@ const ListedProperties = ({ username }) => {
         fetchData();
     }, [username]);
 
-    const handleDelete = async (propertyId) => {
-        const response = await fetch(`${BASE_URL}/api/property/properties/${propertyId}`, {
-            method: 'DELETE',
-        });
-
-        if (response.ok) {
-            setProperties(properties.filter((property) => property._id !== propertyId));
-        } else {
-            // Handle error
-        }
-    };
-
-    const handlePay = async (propertyId) => {
-        // Handle payment logic here
-    };
-
     return (
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
             <h2 className="text-2xl font-semibold mb-4">Listed Properties by {username}</h2>
@@ -51,12 +32,6 @@ const ListedProperties = ({ username }) => {
                 {properties.map((property) => (
                     <div key={property._id}>
                         <PropertyCard property={property} formatter={formatter} />
-                        <PropertyActions
-                            propertyId={property._id}
-                            onDelete={handleDelete}
-                            onPay={handlePay}
-                        />
-                        <EditProperty propertyId={property._id} />
                     </div>
                 ))}
             </div>

@@ -57,7 +57,7 @@ const UserRoutes = () => {
             <Route path="/privacy-policy" exact={true} element={<PrivacyPolicy />} />
             <Route path="/privacy-policy-test" exact={true} element={<PrivacyPolicyTest />} />
             <Route path="/help" exact={true} element={<FAQ />} />
-            <Route exact path='/checkout' element={<Checkout />} />
+            <Route path='/checkout/:propertyId' element={<Checkout />} />
             <Route element={<PrivateRoute />}>
                 <Route path="/property-listing" exact={true} element={<PropertyListing />} />
                 <Route path="/saved" exact={true} element={<Saved />} />
