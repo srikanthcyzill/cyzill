@@ -1,6 +1,6 @@
+import axios from 'axios';
 import sha256 from 'sha256';
 import uniqid from 'uniqid';
-import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,23 +11,23 @@ const SALT_INDEX = process.env.SALT_INDEX;
 const SALT_KEY = process.env.SALT_KEY;
 const APP_BE_URL = process.env.APP_BE_URL;
 
-export const initiatePayment = async (req, res, next) => {
+export const initiatePayment = async (req, res) => {
     try {
-        const amount = +req.query.amount;
+        const { amount, userId, phone, name } = req.body;
         if (isNaN(amount) || amount <= 0) {
             throw new Error('Invalid amount');
         }
 
-        let userId = "MUID123";
-        let merchantTransactionId = uniqid();
+        let merchantTransactionId = 'M' + Date.now();
         let normalPayLoad = {
             merchantId: MERCHANT_ID,
             merchantTransactionId: merchantTransactionId,
-            merchantUserId: userId,
+            merchantUserId: 'MUID' + userId,
+            name: name,
             amount: amount * 100,
             redirectUrl: `${APP_BE_URL}/payment/validate/${merchantTransactionId}`,
-            redirectMode: "REDIRECT",
-            mobileNumber: "9999999999",
+            redirectMode: "POST",
+            mobileNumber: phone,
             paymentInstrument: {
                 type: "PAY_PAGE",
             },
@@ -76,7 +76,7 @@ export const validatePayment = async (req, res) => {
             headers: {
                 "Content-Type": "application/json",
                 "X-VERIFY": xVerifyChecksum,
-                "X-MERCHANT-ID": merchantTransactionId,
+                "X-MERCHANT-ID": MERCHANT_ID,
                 accept: "application/json",
             },
         });

@@ -43,7 +43,8 @@ const Location = ({ formData, saveFormData }) => {
             const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newPosition.lat},${newPosition.lng}&key=${MAP_API_KEY}`);
             const data = await response.json();
             if (data.results && data.results.length > 0) {
-                const address = data.results[0].formatted_address;
+                let address = data.results[0].formatted_address;
+                address = address.replace(/^[^\s]+\s/, '');
                 setAddress(address);
                 saveFormData({
                     ...formData,
@@ -56,6 +57,7 @@ const Location = ({ formData, saveFormData }) => {
                 console.log(data);
             }
         };
+
 
         fetchAddress(selectedPlace);
     }, [selectedPlace]);

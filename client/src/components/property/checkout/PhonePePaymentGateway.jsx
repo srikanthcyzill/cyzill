@@ -1,5 +1,3 @@
-// PhonePePaymentGateway.js
-
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../../../config';
 
@@ -26,7 +24,7 @@ const PhonePePaymentGateway = ({ propertyId }) => {
             return;
         }
         try {
-            const response = await fetch(`${BASE_URL}/api/pay`, {
+            const response = await fetch(`${BASE_URL}/api/payment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: amount, propertyId: propertyId }),

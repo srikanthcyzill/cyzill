@@ -105,10 +105,8 @@ const PropertyListing = () => {
                     state.formData.propertyType.trim() !== '' &&
                     (state.formData.propertyType !== 'flat' || state.formData.totalFlats.trim() !== '')
                 );
-
-
             case 2:
-                return state.formData.media && state.formData.media.length > 0;
+                return state.formData.photos && state.formData.photos.length > 0;
             case 3:
                 return state.formData.location.lat !== '' && state.formData.location.lng !== '';
             case 4:
@@ -120,6 +118,7 @@ const PropertyListing = () => {
                 return true;
         }
     };
+
 
     const isLastStep = step === Object.keys(steps).length;
 
